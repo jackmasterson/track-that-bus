@@ -19098,15 +19098,19 @@ var Launch = exports.Launch = function (_Component) {
         value: function render() {
             var _this4 = this;
 
-            return _react2.default.createElement(_Admin.Admin, {
-                submitDestination: function submitDestination(dest) {
-                    return _this4.submitDestination(dest);
-                },
-                submitStops: function submitStops(stops) {
-                    return _this4.submitStops(stops);
-                },
-                destinations: this.state.destinations
-            });
+            if (window.location.pathname === '/admin') {
+                return _react2.default.createElement(_Admin.Admin, {
+                    submitDestination: function submitDestination(dest) {
+                        return _this4.submitDestination(dest);
+                    },
+                    submitStops: function submitStops(stops) {
+                        return _this4.submitStops(stops);
+                    },
+                    destinations: this.state.destinations
+                });
+            } else {
+                return _react2.default.createElement(_User.User, { destination: this.state.selected });
+            }
         }
     }]);
 
@@ -19151,18 +19155,9 @@ var User = exports.User = function (_Component) {
     }
 
     _createClass(User, [{
-        key: 'componentWillMount',
-        value: function componentWillMount() {
-            console.log(this.props);
-        }
-    }, {
         key: 'render',
         value: function render() {
-            return _react2.default.createElement(_Map.Map, {
-                destCoords: this.props.destination,
-                lat: this.props.location.lat,
-                lng: this.props.location.lng
-            });
+            return _react2.default.createElement(_Map.Map, null);
         }
     }]);
 
@@ -19209,73 +19204,81 @@ var Map = exports.Map = function (_Component) {
     }
 
     _createClass(Map, [{
+        key: 'componentWillMount',
+        value: function componentWillMount() {}
+    }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
             var _this2 = this;
 
+            fetch('/user', {
+                method: 'post',
+                body: {}
+            }).then(function (res) {
+                return res.json();
+            }).then(function (res) {
+                console.log('res: ', res);
+                _this2.setState({
+                    data: res
+                });
+            }).catch(function (err) {
+                console.log('err is: ', err);
+            });
             var el = document.getElementById('map');
-            var center = { lat: this.props.lat, lng: this.props.lng };
-            var monmouth = this.props.destCoords;
-            console.log(monmouth);
+            var dest = this.props.destCoords;
+
             _googleMaps2.default.KEY = process.env.GOOGLE_MAPS_KEY;
             _googleMaps2.default.load(function (google) {
                 var map = new google.maps.Map(el, {
-                    zoom: 15,
-                    center: center
+                    zoom: 9,
+                    center: _this2.state.data.currentCoords
                 });
                 var current = new google.maps.Marker({
-                    position: center,
+                    position: _this2.state.data.currentCoords,
                     map: map
                 });
                 var origin = new google.maps.Marker({
-                    position: monmouth,
+                    position: _this2.state.data.destinationCoords,
                     map: map
                 });
             });
-            setTimeout(function () {
-                fetch('/ready', {
-                    method: 'post'
-                }).then(function (res) {
-                    console.log('res: ', res);
-                    return res.json();
-                }).then(function (res) {
-                    console.log('second res: ', res);
-                    if (res.ready) {
-                        fetch('/duration', {
-                            method: 'post',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: {}
-                        }).then(function (res) {
-                            console.log(res);
-                            return res.json();
-                        }).then(function (res) {
-                            console.log('res: ', res);
-                            _this2.setState({ dist: res.dist, duration: res.duration });
-                        }).catch(function (err) {
-                            console.log('err: ', err);
-                        });
-                    } else {
-                        console.log('not ready');
-                    }
-                });
-            }, 5000);
         }
     }, {
         key: 'render',
         value: function render() {
-            if (this.state && this.state.dist) {
+            if (this.state && this.state.data) {
                 return _react2.default.createElement(
                     'div',
                     null,
-                    'distance to monmouth: ',
-                    this.state.dist,
-                    ', duration: ',
-                    this.state.duration
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        'you\'ve got ',
+                        this.state.data.distanceToDestination,
+                        ' until ',
+                        this.state.data.destination
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        'you\'ve got ',
+                        this.state.data.durationToDestination,
+                        ' until ',
+                        this.state.data.destination
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        'it\'s stopping at ',
+                        this.state.data.stops
+                    )
                 );
             } else {
-                return _react2.default.createElement('div', null);
+                return _react2.default.createElement(
+                    'div',
+                    null,
+                    'Loading...'
+                );
             }
         }
     }]);

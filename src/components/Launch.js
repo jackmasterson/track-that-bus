@@ -84,10 +84,14 @@ export class Launch extends Component {
         console.warn(`ERROR(${err.code}): ${err.message}`);
     };
     render() {
-        return <Admin
-                    submitDestination={(dest) => this.submitDestination(dest)}
-                    submitStops={(stops) => this.submitStops(stops)}
-                    destinations={this.state.destinations}
-                />
+        if (window.location.pathname === '/admin') {
+            return <Admin
+                        submitDestination={(dest) => this.submitDestination(dest)}
+                        submitStops={(stops) => this.submitStops(stops)}
+                        destinations={this.state.destinations}
+                    />
+        } else {
+            return <User destination={this.state.selected}/>
+        }
     }
 }

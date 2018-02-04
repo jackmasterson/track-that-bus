@@ -19,13 +19,6 @@ console.log('app listening on port ', PORT);
 app.get('*', (req, res) => {
     res.sendFile(path.join(DIST_DIR, 'index.html'));
 });
-app.post('/trip-info', (req, res) => {
-    this.destination = req.body.destination;
-    this.departureTime = req.body.departureTime;
-    this.destCoords = req.body.destCoords;
-
-    console.log(this.destination, this.departureTime, this.destCoords);
-});
 
 app.post('/update', (req, res) => {
     console.log(req.body);
@@ -44,11 +37,33 @@ app.post('/update', (req, res) => {
             destination: `${this.destinationLat}, ${this.destinationLng}`,
             units: 'imperial',
             mode: 'driving',
-        }, function(err, data) {
+        }, (err, data) => {
             if (err) return console.log(err);
             this.dist = data.distance;
             this.duration = data.duration;
-            console.log('distance remaining: ', this.dist);
-            console.log('duration remaining: ', this.duration);
         });
+});
+
+app.post('/user', (req, res) => {
+    res.send(JSON.stringify({
+            currentCoords: {
+                lat: this.currentLat,
+                lng: this.currentLng
+            },
+            stops: this.stops,
+            distanceToDestination: this.dist,
+            durationToDestination: this.duration,
+            destination: this.destination,
+            destinationCoords: {
+                lat: this.destinationLat,
+                lng: this.destinationLng,
+            }
+        }
+    ));
+    console.log('this.dist: ', this.dist);
+    console.log('this duration: ', this.duration);
+    console.log('current lat lng: ', this.currentLat, this.currentLng);
+    console.log('this destination: ', this.destination);
+    console.log('this.stops: ', this.stops);
+    console.log('this.destination lat lng: ', this.destinationLat, this.destinationLng);
 });
