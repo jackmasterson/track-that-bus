@@ -1,0 +1,29 @@
+body {
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+}
+
+ul {
+    margin: 15px 0 0 0;
+    padding: 0;
+}
+
+.launch-div {
+    width: 100vw;
+    height: 100vh;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.launch-header {
+    width: 100vw;
+}
+
+#map {
+    width: 100vw;
+    height: 100vh;
+}
+.stops {
+    margin: 15px;
+}
