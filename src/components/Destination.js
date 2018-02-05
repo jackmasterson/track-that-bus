@@ -11,16 +11,20 @@ export class Destination extends Component {
             destination: dest
         })
     }
+    submitDestination(dest) {
+        this.props.submitDestination(dest);
+        this.props.displayStops(true);
+    }
     render() {
         return (
             <div>
-                <p>Where would you like to go?</p>
+                <p>What is your end destination?</p>
                 {this.props.destinations.map((dest, ukey) => {
                     return (
                         <div className="selection" key={ukey} onClick={(e) => this.selectDestination(dest, e.target)}>{dest.stop}</div>
                     );
                 })}
-                <button onClick={() => this.props.submitDestination(this.state.destination)}>Submit</button>
+                <button onClick={() => this.submitDestination(this.state.destination)}>Submit</button>
             </div>
         );
     }

@@ -64,7 +64,7 @@ export class Launch extends Component {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({currentCoords, dest: this.dest, stops: this.stops}),
+            body: JSON.stringify({currentCoords, dest: this.dest, stops: JSON.stringify(this.stops)}),
         })
         .then((res) => {
             return res.json();
@@ -74,7 +74,7 @@ export class Launch extends Component {
         });
         this.timeout = setTimeout(() => {
             this.getLocation();
-        }, 45000);
+        }, 4500000000000000);
         this.setState({
             sent: true,
             currentCoords: currentCoords,

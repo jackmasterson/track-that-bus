@@ -45,25 +45,43 @@ app.post('/update', (req, res) => {
 });
 
 app.post('/user', (req, res) => {
-    res.send(JSON.stringify({
-            currentCoords: {
-                lat: this.currentLat,
-                lng: this.currentLng
-            },
-            stops: this.stops,
-            distanceToDestination: this.dist,
-            durationToDestination: this.duration,
-            destination: this.destination,
-            destinationCoords: {
-                lat: this.destinationLat,
-                lng: this.destinationLng,
-            }
-        }
-    ));
-    console.log('this.dist: ', this.dist);
-    console.log('this duration: ', this.duration);
-    console.log('current lat lng: ', this.currentLat, this.currentLng);
-    console.log('this destination: ', this.destination);
-    console.log('this.stops: ', this.stops);
-    console.log('this.destination lat lng: ', this.destinationLat, this.destinationLng);
+    let stops = [];
+    this.stops = JSON.parse(this.stops);
+    for (let t = 0; t < this.stops.length; t++) {
+        console.log('stop: ', this.stops[t]);
+        let stop = this.stops[t];
+        distance.get(
+            {
+                origin: `${this.currentLat}, ${this.currentLng}`,
+                destination: `${stop.coords.lat}, ${stop.coords.lng}`,
+                units: 'imperial',
+                mode: 'driving',
+            }, (err, data) => {
+                if (err) return console.log(err);
+                stops.push({
+                    stop: stop.stop,
+                    distance: data.distance,
+                    duration: data.duration,
+                    coords: stop.coords,
+                });
+                if (stops.length === this.stops.length) {
+                    res.send(JSON.stringify({
+                            currentCoords: {
+                                lat: this.currentLat,
+                                lng: this.currentLng
+                            },
+                            stops: stops,
+                            distanceToDestination: this.dist,
+                            durationToDestination: this.duration,
+                            destination: this.destination,
+                            destinationCoords: {
+                                lat: this.destinationLat,
+                                lng: this.destinationLng,
+                            }
+                        }
+                    ));
+                }
+            });
+    }
+
 });

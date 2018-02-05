@@ -3,11 +3,13 @@ import React, {Component} from 'react';
 export class Stops extends Component {
     componentWillMount() {
         this.stops = this.stops || [];
+        this.stopsCoords = this.stopsCoords || [];
     }
     selectStops(stop) {
         console.log(stop);
         let d = document.querySelector('.stops');
         this.stops.push(stop.stop);
+        this.stopsCoords.push(stop);
         d.innerHTML = this.stops;
     }
     render() {
@@ -22,7 +24,7 @@ export class Stops extends Component {
                     );
                 })}
                 <div className="stops"></div>
-                <button onClick={() => this.props.submitStops(this.stops)}>Submit</button>
+                <button onClick={() => this.props.submitStops(this.stopsCoords)}>Submit</button>
             </div>
         );
     }

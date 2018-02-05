@@ -27,3 +27,15 @@ ul {
 .stops {
     margin: 15px;
 }
+
+.admin-launch {
+    width: 100vw;
+    text-align: center;
+}
+
+.view {
+    display: block;
+}
+.hide {
+    display: none;
+}
