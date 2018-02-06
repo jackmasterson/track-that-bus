@@ -44,8 +44,9 @@ export class User extends Component {
                 orig == loc.map ? details['origin'] = loc.stop : orig;
                 orig == loc.map ? details['departureTime'] = depTime : orig;
                 orig == loc.map ? details['buid'] = k : orig;
-                orig == loc.map ? details['coords'] = loc.coords : orig;
+                orig == loc.map ? details['originCoords'] = loc.coords : orig;
                 destination == loc.map ? details['destination'] = loc.stop : orig;
+                destination == loc.map ? details['destinationCoords'] = loc.coords : orig;
             });
             this.locations.push(details);
         }

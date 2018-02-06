@@ -19250,8 +19250,9 @@ var User = exports.User = function (_Component) {
                         orig == loc.map ? details['origin'] = loc.stop : orig;
                         orig == loc.map ? details['departureTime'] = depTime : orig;
                         orig == loc.map ? details['buid'] = k : orig;
-                        orig == loc.map ? details['coords'] = loc.coords : orig;
+                        orig == loc.map ? details['originCoords'] = loc.coords : orig;
                         destination == loc.map ? details['destination'] = loc.stop : orig;
+                        destination == loc.map ? details['destinationCoords'] = loc.coords : orig;
                     });
                     _this3.locations.push(details);
                 };
@@ -19406,18 +19407,29 @@ var Map = exports.Map = function (_Component) {
             _googleMaps2.default.load(function (google) {
                 var map = new google.maps.Map(el, {
                     zoom: 9,
-                    center: _this2.props.mapped.coords
+                    center: _this2.props.mapped.originCoords
                 });
 
                 var destinationWindow = new google.maps.InfoWindow({
-                    content: '<h4>Origin: ' + _this2.props.mapped.origin + '</h4>\n                <h4>End Destination: ' + _this2.props.mapped.destination + '</h4>'
+                    content: '<h4>End Destination: ' + _this2.props.mapped.destination + '</h4>'
                 });
                 var destination = new google.maps.Marker({
-                    position: _this2.props.mapped.coords,
+                    position: _this2.props.mapped.destinationCoords,
                     map: map
                 });
                 destination.addListener('click', function () {
                     destinationWindow.open(map, destination);
+                });
+
+                var originWindow = new google.maps.InfoWindow({
+                    content: '<h4>Origin: ' + _this2.props.mapped.origin + '</h4>'
+                });
+                var origin = new google.maps.Marker({
+                    position: _this2.props.mapped.originCoords,
+                    map: map
+                });
+                origin.addListener('click', function () {
+                    originWindow.open(map, origin);
                 });
             });
         }

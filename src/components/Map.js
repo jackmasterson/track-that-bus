@@ -9,19 +9,29 @@ export class Map extends Component {
         GoogleMapsLoader.load((google) => {
             let map = new google.maps.Map(el, {
                 zoom: 9,
-                center: this.props.mapped.coords,
+                center: this.props.mapped.originCoords,
             });
        
             let destinationWindow = new google.maps.InfoWindow({
-                content: `<h4>Origin: ${this.props.mapped.origin}</h4>
-                <h4>End Destination: ${this.props.mapped.destination}</h4>`
+                content: `<h4>End Destination: ${this.props.mapped.destination}</h4>`
             });
             let destination = new google.maps.Marker({
-                position: this.props.mapped.coords,
+                position: this.props.mapped.destinationCoords,
                 map: map
-            })
+            });
             destination.addListener('click', () => {
                 destinationWindow.open(map, destination);
+            });
+
+            let originWindow = new google.maps.InfoWindow({
+                content: `<h4>Origin: ${this.props.mapped.origin}</h4>`
+            });
+            let origin = new google.maps.Marker({
+                position: this.props.mapped.originCoords,
+                map: map
+            });
+            origin.addListener('click', () => {
+                originWindow.open(map, origin);
             });
         });
     }
