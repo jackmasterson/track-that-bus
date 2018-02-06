@@ -25,10 +25,10 @@ export class Admin extends Component {
                 nextScene={() => this.nextScene()}
                 submitTime={(time) => this.props.submitLocation(time, 'departureTime')}
             />,
-            stops: <Stops
-                stops={this.props.locations}
-                submitStops={(stops) => this.props.submitStops(stops)}
-            />,
+            // stops: <Stops
+            //     stops={this.props.locations}
+            //     submitStops={(stops) => this.props.submitStops(stops)}
+            // />,
         }
         this.displayKeys = Object.keys(this.display);
         let display = this.displayKeys[this.sceneTrack];
@@ -42,7 +42,10 @@ export class Admin extends Component {
         ++this.sceneTrack;
         this.setState({
             display: this.displayKeys[this.sceneTrack],
-        })
+        });
+        if (this.sceneTrack === this.displayKeys.length) {
+            this.props.getLocation();
+        }
     }
     render() {
                 return (

@@ -25,11 +25,11 @@ app.post('/update', (req, res) => {
     this.currentLat = req.body.currentCoords.lat;
     this.currentLng = req.body.currentCoords.lng;
 
-    this.destination = req.body.dest.stop;
-    this.stops = req.body.stops;
+    // this.destination = req.body.dest.stop;
+    // this.stops = req.body.stops;
 
-    this.destinationLat = req.body.dest.coords.lat;
-    this.destinationLng = req.body.dest.coords.lng;
+    // this.destinationLat = req.body.dest.coords.lat;
+    // this.destinationLng = req.body.dest.coords.lng;
 
     // distance.get(
     //     {
@@ -46,7 +46,7 @@ app.post('/update', (req, res) => {
 
 app.post('/user', (req, res) => {
     let stops = [];
-    this.stops = JSON.parse(this.stops);
+    // this.stops = JSON.parse(this.stops);
     // for (let t = 0; t < this.stops.length; t++) {
     //     console.log('stop: ', this.stops[t]);
     //     let stop = this.stops[t];

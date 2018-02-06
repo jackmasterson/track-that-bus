@@ -10,21 +10,27 @@ export class Launch extends Component {
             locations: [{
                 stop: 'Port Authority',
                 coords: { lat: 40.7568858, lng: -73.9931965 },
+                map: 1,
             }, {
                 stop: 'Cheesequake',
                 coords: { lat: 40.4664835, lng: -74.2916424 },
+                map: 2
             }, {
                 stop: 'PNC',
                 coords: { lat: 40.3853523, lng: -74.1848752 },
+                map: 3
             }, {
                 stop: 'Red Bank',
                 coords: { lat: 40.3499661, lng: -74.0877706 },
+                map: 4
             }, {
                 stop: 'Monmouth',
                 coords: { lat: 40.1983467, lng: -74.1013166 },
+                map: 5
             }, {
                 stop: 'Forked River',
                 coords: { lat: 39.8741802, lng: -74.2168655 },
+                map: 6
             }],
             times: [{
                 time: '5:10am',
@@ -43,8 +49,6 @@ export class Launch extends Component {
         });
     }
     submitStops(stops) {
-        this.getLocation();
-
         this.setState({
             stops: stops,
         });
@@ -52,7 +56,7 @@ export class Launch extends Component {
     getLocation() {
         const options = {
             enableHighAccuracy: true,
-            timeout: 45000,
+            timeout: 450000,
             maximumAge: 0
         };
 
@@ -61,6 +65,16 @@ export class Launch extends Component {
         }, this.error, options);
     }
     success(pos) {
+        let buid = '';
+        let dest = this.state.destination.stop;
+        let origin = this.state.origin.stop;
+        let dep = this.state.departureTime;
+        this.state.locations.map((loc) => {
+            loc.stop === origin ? buid += `&origin_${loc.map}` : buid;
+            loc.stop === dest ? buid += `&dest_${loc.map}` : buid;
+            loc.stop === origin ? buid += `&depTime_${dep}` : buid;
+        });
+        console.log('buid: ', buid);
         let currentCoords = {
             lat: pos.coords.latitude,
             lng: pos.coords.longitude,
@@ -72,9 +86,8 @@ export class Launch extends Component {
             },
             body: JSON.stringify({
                 currentCoords, 
-                origin: this.state.origin, 
-                destination: this.state.destination,
-                stops: JSON.stringify(this.stops)}),
+                buid,
+            })
         })
         .then((res) => {
             return res.json();
@@ -82,12 +95,15 @@ export class Launch extends Component {
         .catch((err) => {
             console.log('error is: ', err);
         });
+
+        // bug
         this.timeout = setTimeout(() => {
             this.getLocation();
-        }, 4500000000000000);
+        }, 4500000);
+        // end bug
+
         this.setState({
             sent: true,
-            currentCoords: currentCoords,
         });
     };
     error(err) {
@@ -95,13 +111,19 @@ export class Launch extends Component {
     };
     render() {
         if (window.location.pathname === '/admin') {
-            console.log('this state: ', this.state);
-            return <Admin
-                        submitLocation={(loc, type) => this.submitLocation(loc, type)}
-                        submitStops={(stops) => this.submitStops(stops)}
-                        locations={this.state.locations}
-                        times={this.state.times}
-                    />
+            if (this.state.sent) {
+                return (
+                    <div>Coordinates sent!</div>
+                )
+            } else {
+                return <Admin
+                    submitLocation={(loc, type) => this.submitLocation(loc, type)}
+                    submitStops={(stops) => this.submitStops(stops)}
+                    locations={this.state.locations}
+                    times={this.state.times}
+                    getLocation={() => this.getLocation()}
+                />
+            }
         } else {
             return <User destination={this.state.selected}/>
         }
