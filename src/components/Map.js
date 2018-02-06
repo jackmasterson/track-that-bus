@@ -3,41 +3,57 @@ import GoogleMapsLoader from 'google-maps';
 
 export class Map extends Component {
     componentWillMount() {
-        console.log(this.props.mapped);
-        this.markers = this.markers || [];
+        this.infowindows = this.infowindows || [];
         let el = document.getElementById('map');
         GoogleMapsLoader.load((google) => {
             let map = new google.maps.Map(el, {
                 zoom: 8,
                 center: this.props.mapped.originCoords,
             });
-       
-            let destinationWindow = new google.maps.InfoWindow({
-                content: `<h4>End Destination: ${this.props.mapped.destination}</h4>`
-            });
-            let destination = new google.maps.Marker({
-                position: this.props.mapped.destinationCoords,
-                map: map
-            });
-            destination.addListener('click', () => {
-                destinationWindow.open(map, destination);
-            });
+            
+            let destinationData = this.createMarker(google, this.props.mapped.destination, this.props.mapped.destinationCoords, 'Destination', map);
+            let destinationMarker = destinationData.marker;
+            let destinationWindow = destinationData.infowindow;
 
-            let originWindow = new google.maps.InfoWindow({
-                content: `<h4>Origin: ${this.props.mapped.origin}</h4>`
-            });
-            let origin = new google.maps.Marker({
-                position: this.props.mapped.originCoords,
-                map: map
-            });
-            origin.addListener('click', () => {
-                originWindow.open(map, origin);
+            let originData = this.createMarker(google, this.props.mapped.origin, this.props.mapped.originCoords, 'Origin', map);
+            let originMarker = originData.marker;
+            let originWindow = originData.infowindow;
+
+            let stopsData = {};
+            this.props.mapped.stops.map((stop, incr) => {
+                let stopped = this.createMarker(google, stop.stop, stop.coords, 'Stop', map);
+                stopsData[incr] = stopped;
             });
         });
     }
+    createMarker(google, location, coords, type, map) {
+        let marker = new google.maps.Marker({
+            position: coords,
+            map: map
+        });
+
+        let infowindow = new google.maps.InfoWindow({
+            content: `<h4>${type}: ${location}</h4>`
+        });
+
+        this.infowindows.push(infowindow);
+
+        marker.addListener('click', () => {
+            for (let info of this.infowindows) {
+                info.close();
+            }
+            infowindow.open(map, marker);
+        })
+        
+        return {
+            marker,
+            infowindow
+        }
+    }
+
     render() {
         return (
-            <div>Map, Origin is:  {this.props.mapped.origin}</div>
+            <div></div>
         )
     }
 }

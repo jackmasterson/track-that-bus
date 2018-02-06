@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { Button } from 'react-bootstrap';
 
 export class DepartureTime extends Component {
     render() {
@@ -7,11 +8,13 @@ export class DepartureTime extends Component {
                 <h2>What is your departure time?</h2>
                 {this.props.times.map((time, incr) => {
                     return (
-                        <div key={incr} className="times">
+                        <Button 
+                            bsStyle="default"
+                            key={incr} className="times">
                             <div onClick={(e) => 
                                 this.selectTime(time, e.target)} 
                              >{time.time}</div>
-                        </div>
+                        </Button>
                     );
                 })}
                <button onClick={() => this.submitTime(this.state.time)}>Submit</button>
@@ -19,12 +22,6 @@ export class DepartureTime extends Component {
         );
     }
     selectTime(time, el) {
-        let quer = document.querySelectorAll('.times');
-        for (let t = 0; t < quer.length; t++) {
-            let q = quer[t];
-            q.style.border = '';
-        }
-        el.style.border = '1px solid black';
         this.setState({
             selectedTime: time.time,
         })

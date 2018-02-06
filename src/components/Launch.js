@@ -70,7 +70,7 @@ export class Launch extends Component {
         let origin = this.state.origin.stop;
         let dep = this.state.departureTime;
         this.state.locations.map((loc) => {
-            loc.stop === origin ? buid += `origin_${loc.map}` : buid;
+            loc.stop === origin ? buid += `&origin_${loc.map}` : buid;
             loc.stop === dest ? buid += `&dest_${loc.map}` : buid;
             loc.stop === origin ? buid += `&depTime_${dep}` : buid;
         });
@@ -87,6 +87,7 @@ export class Launch extends Component {
             body: JSON.stringify({
                 currentCoords, 
                 buid,
+                stops: this.state.stops,
             })
         })
         .then((res) => {
@@ -106,6 +107,12 @@ export class Launch extends Component {
             sent: true,
         });
     };
+    handleStops(stops) {
+        this.setState({
+            stops
+        });
+        this.getLocation();
+    }
     error(err) {
         console.warn(`ERROR(${err.code}): ${err.message}`);
     };
@@ -113,7 +120,7 @@ export class Launch extends Component {
         if (window.location.pathname === '/admin') {
             if (this.state.sent) {
                 return (
-                    <div>Coordinates sent!</div>
+                    <div className="launch-div">Coordinates sent!</div>
                 )
             } else {
                 return <Admin
@@ -122,6 +129,7 @@ export class Launch extends Component {
                     locations={this.state.locations}
                     times={this.state.times}
                     getLocation={() => this.getLocation()}
+                    handleStops={(stops) => this.handleStops(stops)}
                 />
             }
         } else {

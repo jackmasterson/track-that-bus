@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Map} from './Map';
+import {ListGroup, ListGroupItem} from 'react-bootstrap';
 
 export class User extends Component {
     componentWillMount() {
@@ -16,30 +17,34 @@ export class User extends Component {
             return res.json();
         })
         .then((res) => {
-
-        // stubbed 
-        // let res = {
-        //     'origin_1&depTime_6:25am&dest_5': {
-        //         lat: 40.7507409,
-        //         lng: -73.9820202
-        //     }
-        // }
-        // end stubbed
             this.buildOptions(res);
         });
     }
     buildOptions(opts) {
         let keys = Object.keys(opts);
         let locations = this.props.options;
-
+        
+        console.log('opts: ', opts);
         this.locations = [];
 
         for (let k of keys) {
+            let formattedStops = [];
+            opts[k].stops.map((stop, incr) => {
+                stop = JSON.parse(stop);
+                formattedStops.push(stop);
+            });
             let details = {};
-            let orig = k.split('&')[0].split('origin_')[1];
-            let depTime = k.split('&')[1].split('depTime_')[1];
-            let destination = k.split('&')[2].split('dest_')[1];
-            console.log('dest: ', destination);
+            k = k.split('&');
+
+            let orig;
+            let depTime;
+            let destination;
+            k.map(ke => {
+                ke.indexOf('dest') > -1 ? destination = ke.split('dest_')[1] : destination;
+                ke.indexOf('origin') > -1 ? orig = ke.split('origin_')[1] : orig;
+                ke.indexOf('depTime') > -1 ? depTime = ke.split('depTime_')[1] : depTime;
+            });
+
             locations.map(loc => {
                 orig == loc.map ? details['origin'] = loc.stop : orig;
                 orig == loc.map ? details['departureTime'] = depTime : orig;
@@ -47,15 +52,17 @@ export class User extends Component {
                 orig == loc.map ? details['originCoords'] = loc.coords : orig;
                 destination == loc.map ? details['destination'] = loc.stop : orig;
                 destination == loc.map ? details['destinationCoords'] = loc.coords : orig;
+                destination == loc.map ? details['stops'] = formattedStops : details;
             });
             this.locations.push(details);
+
         }
         this.setState({
-            locations: this.locations
+            locations: this.locations,
+            stops: opts.stops,
         });
     }
     selectLocation(loc, el) {
-        el.style.border = '10px solid black';
         this.setState({
             selected: loc
         });
@@ -68,28 +75,33 @@ export class User extends Component {
     render() {
         if (this.state.locations && !this.state.mapped) {
             return (
-                <div>
+                <ListGroup>
                     {this.state.locations.map((loc, incr) => {
                         return (
-                            <div
-                                className="border"
-                                onClick={(e) =>
-                                    this.selectLocation(loc, e.target)}
-                                key={incr}>
-                                <h3>Origin: {loc.origin}</h3>
-                                <h4>Departure Time: {loc.departureTime}</h4>
-                                <h4>Destination: {loc.destination}</h4>
-                            </div>
+                            <ListGroupItem bsSize="large"
+                                key={incr}
+                                onClick={(e) => this.selectLocation(loc, e.target)}>
+                                <h3 className="spaced">Origin: {loc.origin}</h3>
+                                <h4 className="spaced smaller">Destination: {loc.destination}</h4>
+                                <h4 className="spaced smaller">Departure Time: {loc.departureTime}</h4>
+                                <ul className="bullets spaced">Stops: 
+                                    {loc.stops.map((stop, j) => {
+                                        return (<li 
+                                                    className="inline-block"
+                                                    key={j}>{stop.stop}</li>)
+                                    })}
+                                </ul>
+                            </ListGroupItem>
                         );
                     })}
-                    <button onClick={() => this.submit()}>Submit</button>
-                </div>)
+                    <button 
+                        className="fixed-submit"
+                        onClick={() => this.submit()}>Submit</button>
+                </ListGroup>)
         } else if (this.state.mapped) {
-            console.log(this.state);
-            return <Map
-                mapped={this.state.mapped} />
+            return <Map mapped={this.state.mapped}/>
         } else {
-            return (<div>Hey</div>);
+            return (<div>Something went wrong</div>);
         }
     }
 }

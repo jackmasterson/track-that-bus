@@ -18,14 +18,23 @@ app.use(bodyParser.urlencoded({
 app.use(express.static(DIST_DIR));
 
 console.log('app listening on port ', PORT);
-app.get('*', (req, res) => {
+app.get('/', (req, res) => {
     res.sendFile(path.join(DIST_DIR, 'index.html'));
+});
+
+app.get('/driver', (req, res) => {
+    res.sendFile(path.join(DIST_DIR, 'driver.html'));
+});
+
+app.get('/passenger', (req, res) => {
+    res.sendFile(path.join(DIST_DIR, 'passenger.html'));
 });
 
 app.post('/update', (req, res) => {
     console.log(req.body);
     let buid = req.body.buid;
     this.buids[buid] = req.body.currentCoords;
+    this.buids[buid].stops = req.body.stops;
     // this.currentLat = req.body.currentCoords.lat;
     // this.currentLng = req.body.currentCoords.lng;
 
@@ -50,7 +59,6 @@ app.post('/update', (req, res) => {
 
 
 app.post('/user', (req, res) => {
-    console.log('this.buids: ', this.buids);
     res.send(this.buids);
 });
 

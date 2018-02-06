@@ -1,7 +1,7 @@
 body {
     height: 100vh;
     width: 100vw;
-    overflow: hidden;
+    overflow-x: scroll;
 }
 
 ul {
@@ -41,4 +41,32 @@ ul {
 }
 .border {
     border: 1px solid black;
+}
+
+.selection {
+    margin: 25px;
+}
+
+.colorful {
+    color: green;
+}
+
+.inline-block {
+    display: inline-block;
+    margin: 15px;
+}
+
+.spaced {
+    margin: 15px;
+}
+
+.fixed-submit {
+    position: fixed;
+    right: 100px;
+    top: 100px;
+    z-index: 1000000;
+}
+
+.smaller {
+    font-size: 20px;
 }

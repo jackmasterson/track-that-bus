@@ -59,6 +59,7 @@ export class Admin extends Component {
                     stops={this.props.locations}
                     origin={this.state.origin}
                     destination={this.state.destination}
+                    handleStops={(stops) => this.props.handleStops(stops)}
                 />
             )
         } else {

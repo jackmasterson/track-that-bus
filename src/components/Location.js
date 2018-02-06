@@ -1,12 +1,8 @@
 import React, {Component} from 'react';
+import {Button} from 'react-bootstrap';
 
 export class Location extends Component {
     selectLocation(loc, div) {
-        let divs = document.querySelectorAll('.selection');
-        for (let div of divs) {
-            div.style.border = '';
-        }
-        div.style.border = '1px solid black';
         this.setState({
             location: loc
         })
@@ -18,12 +14,22 @@ export class Location extends Component {
     render() {
         return (
             <div>
-                <p>What is your {this.props.type}?</p>
+                <h3>What is your <span 
+                        className="colorful">
+                         {this.props.type}
+                    </span>?
+                </h3>
                 {this.props.locations.map((loc, ukey) => {
                     return (
-                        <div className="selection" key={ukey} onClick={(e) => this.selectLocation(loc, e.target)}>{loc.stop}</div>
+                        <Button 
+                            className="selection" 
+                            key={ukey} 
+                            onClick={(e) => this.selectLocation(loc, e.target)}>
+                            {loc.stop}
+                        </Button>
                     );
                 })}
+                <br/>
                 <button onClick={() => this.submitLocation(this.state.location)}>Submit</button>
             </div>
         );
