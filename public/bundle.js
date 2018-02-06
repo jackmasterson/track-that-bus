@@ -18955,7 +18955,7 @@ exports = module.exports = __webpack_require__(14)(false);
 
 
 // module
-exports.push([module.i, "body {\n    height: 100vh;\n    width: 100vw;\n    overflow: hidden;\n}\n\nul {\n    margin: 15px 0 0 0;\n    padding: 0;\n}\n\n.launch-div {\n    width: 100vw;\n    height: 100vh;\n    text-align: center;\n    vertical-align: middle;\n}\n\n.launch-header {\n    width: 100vw;\n}\n\n#map {\n    width: 100vw;\n    height: 100vh;\n}\n.stops {\n    margin: 15px;\n}\n\n.admin-launch {\n    width: 100vw;\n    text-align: center;\n}\n\n.view {\n    display: block;\n}\n.hide {\n    display: none;\n}\n", ""]);
+exports.push([module.i, "body {\n    height: 100vh;\n    width: 100vw;\n    overflow: hidden;\n}\n\nul {\n    margin: 15px 0 0 0;\n    padding: 0;\n}\n\n.launch-div {\n    width: 100vw;\n    height: 100vh;\n    text-align: center;\n    vertical-align: middle;\n}\n\n.launch-header {\n    width: 100vw;\n}\n\n#map {\n    width: 100vw;\n    height: 100vh;\n}\n.stops {\n    margin: 15px;\n}\n\n.admin-launch {\n    width: 100vw;\n    text-align: center;\n}\n\n.view {\n    display: block;\n}\n.hide {\n    display: none;\n}\n.border {\n    border: 1px solid black;\n}\n", ""]);
 
 // exports
 
@@ -19010,27 +19010,27 @@ var Launch = exports.Launch = function (_Component) {
                 locations: [{
                     stop: 'Port Authority',
                     coords: { lat: 40.7568858, lng: -73.9931965 },
-                    map: 1
+                    map: 0
                 }, {
                     stop: 'Cheesequake',
                     coords: { lat: 40.4664835, lng: -74.2916424 },
-                    map: 2
+                    map: 1
                 }, {
                     stop: 'PNC',
                     coords: { lat: 40.3853523, lng: -74.1848752 },
-                    map: 3
+                    map: 2
                 }, {
                     stop: 'Red Bank',
                     coords: { lat: 40.3499661, lng: -74.0877706 },
-                    map: 4
+                    map: 3
                 }, {
                     stop: 'Monmouth',
                     coords: { lat: 40.1983467, lng: -74.1013166 },
-                    map: 5
+                    map: 4
                 }, {
                     stop: 'Forked River',
                     coords: { lat: 39.8741802, lng: -74.2168655 },
-                    map: 6
+                    map: 5
                 }],
                 times: [{
                     time: '5:10am'
@@ -19080,7 +19080,7 @@ var Launch = exports.Launch = function (_Component) {
             var origin = this.state.origin.stop;
             var dep = this.state.departureTime;
             this.state.locations.map(function (loc) {
-                loc.stop === origin ? buid += '&origin_' + loc.map : buid;
+                loc.stop === origin ? buid += 'origin_' + loc.map : buid;
                 loc.stop === dest ? buid += '&dest_' + loc.map : buid;
                 loc.stop === origin ? buid += '&depTime_' + dep : buid;
             });
@@ -19147,7 +19147,8 @@ var Launch = exports.Launch = function (_Component) {
                     });
                 }
             } else {
-                return _react2.default.createElement(_User.User, { destination: this.state.selected });
+                return _react2.default.createElement(_User.User, {
+                    options: this.state.locations });
             }
         }
     }]);
@@ -19193,12 +19194,150 @@ var User = exports.User = function (_Component) {
     }
 
     _createClass(User, [{
+        key: 'componentWillMount',
+        value: function componentWillMount() {
+            this.setState({
+                locations: null
+            });
+        }
+    }, {
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            var _this2 = this;
+
+            fetch('/user', {
+                method: 'post',
+                body: {}
+            }).then(function (res) {
+                return res.json();
+            }).then(function (res) {
+
+                // stubbed 
+                // let res = {
+                //     'origin_1&depTime_6:25am&dest_5': {
+                //         lat: 40.7507409,
+                //         lng: -73.9820202
+                //     }
+                // }
+                // end stubbed
+                _this2.buildOptions(res);
+            });
+        }
+    }, {
+        key: 'buildOptions',
+        value: function buildOptions(opts) {
+            var _this3 = this;
+
+            var keys = Object.keys(opts);
+            var locations = this.props.options;
+            this.locations = [];
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+                var _loop = function _loop() {
+                    var k = _step.value;
+
+                    var details = {};
+                    var orig = k.split('&')[0].split('origin_')[1];
+                    var depTime = k.split('&')[1].split('depTime_')[1];
+                    locations.map(function (loc) {
+                        orig == loc.map ? details['origin'] = loc.stop : orig;
+                        orig == loc.map ? details['departureTime'] = depTime : orig;
+                        orig == loc.map ? details['buid'] = k : orig;
+                    });
+                    _this3.locations.push(details);
+                };
+
+                for (var _iterator = keys[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    _loop();
+                }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
+                }
+            }
+
+            this.setState({
+                locations: this.locations
+            });
+        }
+    }, {
+        key: 'selectLocation',
+        value: function selectLocation(loc, el) {
+            el.style.border = '10px solid black';
+            this.setState({
+                selected: loc
+            });
+        }
+    }, {
+        key: 'submit',
+        value: function submit() {
+            this.setState({
+                mapped: this.state.selected
+            });
+        }
+    }, {
         key: 'render',
         value: function render() {
-            return (
-                // <div>Map placeholder</div>
-                _react2.default.createElement(_Map.Map, null)
-            );
+            var _this4 = this;
+
+            if (this.state.locations && !this.state.mapped) {
+                return _react2.default.createElement(
+                    'div',
+                    null,
+                    this.state.locations.map(function (loc, incr) {
+                        return _react2.default.createElement(
+                            'div',
+                            {
+                                className: 'border',
+                                onClick: function onClick(e) {
+                                    return _this4.selectLocation(loc, e.target);
+                                },
+                                key: incr },
+                            _react2.default.createElement(
+                                'h3',
+                                null,
+                                'End Destination: ',
+                                loc.origin
+                            ),
+                            _react2.default.createElement(
+                                'h4',
+                                null,
+                                'Time: ',
+                                loc.departureTime
+                            )
+                        );
+                    }),
+                    _react2.default.createElement(
+                        'button',
+                        { onClick: function onClick() {
+                                return _this4.submit();
+                            } },
+                        'Submit'
+                    )
+                );
+            } else if (this.state.mapped) {
+                console.log(this.state);
+                return _react2.default.createElement(_Map.Map, {
+                    mapped: this.state.mapped });
+            } else {
+                return _react2.default.createElement(
+                    'div',
+                    null,
+                    'Hey'
+                );
+            }
         }
     }]);
 
@@ -19210,7 +19349,7 @@ var User = exports.User = function (_Component) {
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(process) {
+
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -19245,110 +19384,43 @@ var Map = exports.Map = function (_Component) {
     }
 
     _createClass(Map, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {
+        key: 'componentWillMount',
+        value: function componentWillMount() {
             var _this2 = this;
 
-            fetch('/user', {
-                method: 'post',
-                body: {}
-            }).then(function (res) {
-                return res.json();
-            }).then(function (res) {
-                console.log('res: ', res);
-                _this2.markers = _this2.markers || [];
-                _googleMaps2.default.load(function (google) {
-                    var map = new google.maps.Map(el, {
-                        zoom: 9,
-                        center: _this2.state.data.currentCoords
-                    });
-                    var current = new google.maps.Marker({
-                        position: _this2.state.data.currentCoords,
-                        map: map
-                    });
-                    var currentWindow = new google.maps.InfoWindow({
-                        content: '<h1>Current Location</h1>'
-                    });
-                    current.addListener('click', function () {
-                        currentWindow.open(map, current);
-                    });
-                    var _iteratorNormalCompletion = true;
-                    var _didIteratorError = false;
-                    var _iteratorError = undefined;
-
-                    try {
-                        var _loop = function _loop() {
-                            var stop = _step.value;
-
-                            var infoContent = '<h2>' + stop.stop + '</h2>\n                                       <h3>' + stop.duration + '</h3>\n                                       <h4>' + stop.distance + '</h4>';
-                            var marker = new google.maps.Marker({
-                                position: stop.coords,
-                                map: map
-                            });
-                            _this2.markers.push(marker);
-                            var iw = new google.maps.InfoWindow({
-                                content: infoContent
-                            });
-                            marker.addListener('click', function () {
-                                iw.open(map, marker);
-                            });
-                        };
-
-                        for (var _iterator = res.stops[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                            _loop();
-                        }
-                    } catch (err) {
-                        _didIteratorError = true;
-                        _iteratorError = err;
-                    } finally {
-                        try {
-                            if (!_iteratorNormalCompletion && _iterator.return) {
-                                _iterator.return();
-                            }
-                        } finally {
-                            if (_didIteratorError) {
-                                throw _iteratorError;
-                            }
-                        }
-                    }
-                });
-                _this2.setState({
-                    data: res
-                });
-            }).catch(function (err) {
-                console.log('err is: ', err);
-            });
+            this.markers = this.markers || [];
             var el = document.getElementById('map');
-            var dest = this.props.destCoords;
-
-            _googleMaps2.default.KEY = process.env.GOOGLE_MAPS_KEY;
+            _googleMaps2.default.load(function (google) {
+                var map = new google.maps.Map(el, {
+                    zoom: 9,
+                    center: _this2.state.data.currentCoords
+                });
+                var current = new google.maps.Marker({
+                    position: _this2.state.data.currentCoords,
+                    map: map
+                });
+                var currentWindow = new google.maps.InfoWindow({
+                    content: '<h1>Current Location</h1>'
+                });
+                current.addListener('click', function () {
+                    currentWindow.open(map, current);
+                });
+            });
         }
     }, {
         key: 'render',
         value: function render() {
-            if (this.state && this.state.data) {
-                return _react2.default.createElement(
-                    'div',
-                    null,
-                    _react2.default.createElement(
-                        'div',
-                        null,
-                        'click a marker to see the distance to each stop'
-                    )
-                );
-            } else {
-                return _react2.default.createElement(
-                    'div',
-                    null,
-                    'Loading...'
-                );
-            }
+            return _react2.default.createElement(
+                'div',
+                null,
+                'Map, Origin is:  ',
+                this.props.mapped.origin
+            );
         }
     }]);
 
     return Map;
 }(_react.Component);
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
 /* 38 */

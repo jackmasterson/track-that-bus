@@ -8,6 +8,8 @@ const server = app.listen(PORT);
 const bodyParser = require('body-parser');
 const distance = require('google-distance');
 
+this.buids = {};
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
@@ -22,8 +24,10 @@ app.get('*', (req, res) => {
 
 app.post('/update', (req, res) => {
     console.log(req.body);
-    this.currentLat = req.body.currentCoords.lat;
-    this.currentLng = req.body.currentCoords.lng;
+    let buid = req.body.buid;
+    this.buids[buid] = req.body.currentCoords;
+    // this.currentLat = req.body.currentCoords.lat;
+    // this.currentLng = req.body.currentCoords.lng;
 
     // this.destination = req.body.dest.stop;
     // this.stops = req.body.stops;
@@ -44,8 +48,14 @@ app.post('/update', (req, res) => {
     //     });
 });
 
+
 app.post('/user', (req, res) => {
-    let stops = [];
+    console.log('this.buids: ', this.buids);
+    res.send(this.buids);
+});
+
+// app.post('/user', (req, res) => {
+//     let stops = [];
     // this.stops = JSON.parse(this.stops);
     // for (let t = 0; t < this.stops.length; t++) {
     //     console.log('stop: ', this.stops[t]);
@@ -83,5 +93,4 @@ app.post('/user', (req, res) => {
     //             }
     //         });
     // }
-
-});
+// });

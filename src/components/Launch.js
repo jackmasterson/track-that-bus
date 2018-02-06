@@ -10,27 +10,27 @@ export class Launch extends Component {
             locations: [{
                 stop: 'Port Authority',
                 coords: { lat: 40.7568858, lng: -73.9931965 },
-                map: 1,
+                map: 0,
             }, {
                 stop: 'Cheesequake',
                 coords: { lat: 40.4664835, lng: -74.2916424 },
-                map: 2
+                map: 1,
             }, {
                 stop: 'PNC',
                 coords: { lat: 40.3853523, lng: -74.1848752 },
-                map: 3
+                map: 2,
             }, {
                 stop: 'Red Bank',
                 coords: { lat: 40.3499661, lng: -74.0877706 },
-                map: 4
+                map: 3,
             }, {
                 stop: 'Monmouth',
                 coords: { lat: 40.1983467, lng: -74.1013166 },
-                map: 5
+                map: 4,
             }, {
                 stop: 'Forked River',
                 coords: { lat: 39.8741802, lng: -74.2168655 },
-                map: 6
+                map: 5,
             }],
             times: [{
                 time: '5:10am',
@@ -70,7 +70,7 @@ export class Launch extends Component {
         let origin = this.state.origin.stop;
         let dep = this.state.departureTime;
         this.state.locations.map((loc) => {
-            loc.stop === origin ? buid += `&origin_${loc.map}` : buid;
+            loc.stop === origin ? buid += `origin_${loc.map}` : buid;
             loc.stop === dest ? buid += `&dest_${loc.map}` : buid;
             loc.stop === origin ? buid += `&depTime_${dep}` : buid;
         });
@@ -125,7 +125,8 @@ export class Launch extends Component {
                 />
             }
         } else {
-            return <User destination={this.state.selected}/>
+            return <User 
+                    options={this.state.locations}/>
         }
     }
 }
