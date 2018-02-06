@@ -7,7 +7,7 @@ import {SelectionScreen} from './SelectionScreen';
 export class Launch extends Component {
     componentWillMount() {
         this.setState({
-            destinations: [{
+            locations: [{
                 stop: 'Port Authority',
                 coords: { lat: 40.7568858, lng: -73.9931965 },
             }, {
@@ -26,17 +26,23 @@ export class Launch extends Component {
                 stop: 'Forked River',
                 coords: { lat: 39.8741802, lng: -74.2168655 },
             }],
+            times: [{
+                time: '5:10am',
+            }, {
+                time: '5:45am',
+            }, {
+                time: '6:00am',
+            }, {
+                time: '6:25am',
+            }]
         });
     }
-    submitDestination(dest) {
-        this.dest = dest;
-
+    submitLocation(loc, type) {
         this.setState({
-            selected: dest,
+            [type]: loc,
         });
     }
     submitStops(stops) {
-        this.stops = stops;
         this.getLocation();
 
         this.setState({
@@ -64,7 +70,11 @@ export class Launch extends Component {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({currentCoords, dest: this.dest, stops: JSON.stringify(this.stops)}),
+            body: JSON.stringify({
+                currentCoords, 
+                origin: this.state.origin, 
+                destination: this.state.destination,
+                stops: JSON.stringify(this.stops)}),
         })
         .then((res) => {
             return res.json();
@@ -85,10 +95,12 @@ export class Launch extends Component {
     };
     render() {
         if (window.location.pathname === '/admin') {
+            console.log('this state: ', this.state);
             return <Admin
-                        submitDestination={(dest) => this.submitDestination(dest)}
+                        submitLocation={(loc, type) => this.submitLocation(loc, type)}
                         submitStops={(stops) => this.submitStops(stops)}
-                        destinations={this.state.destinations}
+                        locations={this.state.locations}
+                        times={this.state.times}
                     />
         } else {
             return <User destination={this.state.selected}/>

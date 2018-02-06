@@ -31,57 +31,57 @@ app.post('/update', (req, res) => {
     this.destinationLat = req.body.dest.coords.lat;
     this.destinationLng = req.body.dest.coords.lng;
 
-    distance.get(
-        {
-            origin: `${this.currentLat}, ${this.currentLng}`,
-            destination: `${this.destinationLat}, ${this.destinationLng}`,
-            units: 'imperial',
-            mode: 'driving',
-        }, (err, data) => {
-            if (err) return console.log(err);
-            this.dist = data.distance;
-            this.duration = data.duration;
-        });
+    // distance.get(
+    //     {
+    //         origin: `${this.currentLat}, ${this.currentLng}`,
+    //         destination: `${this.destinationLat}, ${this.destinationLng}`,
+    //         units: 'imperial',
+    //         mode: 'driving',
+    //     }, (err, data) => {
+    //         if (err) return console.log(err);
+    //         this.dist = data.distance;
+    //         this.duration = data.duration;
+    //     });
 });
 
 app.post('/user', (req, res) => {
     let stops = [];
     this.stops = JSON.parse(this.stops);
-    for (let t = 0; t < this.stops.length; t++) {
-        console.log('stop: ', this.stops[t]);
-        let stop = this.stops[t];
-        distance.get(
-            {
-                origin: `${this.currentLat}, ${this.currentLng}`,
-                destination: `${stop.coords.lat}, ${stop.coords.lng}`,
-                units: 'imperial',
-                mode: 'driving',
-            }, (err, data) => {
-                if (err) return console.log(err);
-                stops.push({
-                    stop: stop.stop,
-                    distance: data.distance,
-                    duration: data.duration,
-                    coords: stop.coords,
-                });
-                if (stops.length === this.stops.length) {
-                    res.send(JSON.stringify({
-                            currentCoords: {
-                                lat: this.currentLat,
-                                lng: this.currentLng
-                            },
-                            stops: stops,
-                            distanceToDestination: this.dist,
-                            durationToDestination: this.duration,
-                            destination: this.destination,
-                            destinationCoords: {
-                                lat: this.destinationLat,
-                                lng: this.destinationLng,
-                            }
-                        }
-                    ));
-                }
-            });
-    }
+    // for (let t = 0; t < this.stops.length; t++) {
+    //     console.log('stop: ', this.stops[t]);
+    //     let stop = this.stops[t];
+    //     distance.get(
+    //         {
+    //             origin: `${this.currentLat}, ${this.currentLng}`,
+    //             destination: `${stop.coords.lat}, ${stop.coords.lng}`,
+    //             units: 'imperial',
+    //             mode: 'driving',
+    //         }, (err, data) => {
+    //             if (err) return console.log(err);
+    //             stops.push({
+    //                 stop: stop.stop,
+    //                 distance: data.distance,
+    //                 duration: data.duration,
+    //                 coords: stop.coords,
+    //             });
+    //             if (stops.length === this.stops.length) {
+    //                 res.send(JSON.stringify({
+    //                         currentCoords: {
+    //                             lat: this.currentLat,
+    //                             lng: this.currentLng
+    //                         },
+    //                         stops: stops,
+    //                         distanceToDestination: this.dist,
+    //                         durationToDestination: this.duration,
+    //                         destination: this.destination,
+    //                         destinationCoords: {
+    //                             lat: this.destinationLat,
+    //                             lng: this.destinationLng,
+    //                         }
+    //                     }
+    //                 ));
+    //             }
+    //         });
+    // }
 
 });

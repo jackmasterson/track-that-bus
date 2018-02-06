@@ -18986,6 +18986,8 @@ var _SelectionScreen = __webpack_require__(42);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -19005,7 +19007,7 @@ var Launch = exports.Launch = function (_Component) {
         key: 'componentWillMount',
         value: function componentWillMount() {
             this.setState({
-                destinations: [{
+                locations: [{
                     stop: 'Port Authority',
                     coords: { lat: 40.7568858, lng: -73.9931965 }
                 }, {
@@ -19023,22 +19025,26 @@ var Launch = exports.Launch = function (_Component) {
                 }, {
                     stop: 'Forked River',
                     coords: { lat: 39.8741802, lng: -74.2168655 }
+                }],
+                times: [{
+                    time: '5:10am'
+                }, {
+                    time: '5:45am'
+                }, {
+                    time: '6:00am'
+                }, {
+                    time: '6:25am'
                 }]
             });
         }
     }, {
-        key: 'submitDestination',
-        value: function submitDestination(dest) {
-            this.dest = dest;
-
-            this.setState({
-                selected: dest
-            });
+        key: 'submitLocation',
+        value: function submitLocation(loc, type) {
+            this.setState(_defineProperty({}, type, loc));
         }
     }, {
         key: 'submitStops',
         value: function submitStops(stops) {
-            this.stops = stops;
             this.getLocation();
 
             this.setState({
@@ -19074,7 +19080,11 @@ var Launch = exports.Launch = function (_Component) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ currentCoords: currentCoords, dest: this.dest, stops: JSON.stringify(this.stops) })
+                body: JSON.stringify({
+                    currentCoords: currentCoords,
+                    origin: this.state.origin,
+                    destination: this.state.destination,
+                    stops: JSON.stringify(this.stops) })
             }).then(function (res) {
                 return res.json();
             }).catch(function (err) {
@@ -19099,14 +19109,16 @@ var Launch = exports.Launch = function (_Component) {
             var _this4 = this;
 
             if (window.location.pathname === '/admin') {
+                console.log('this state: ', this.state);
                 return _react2.default.createElement(_Admin.Admin, {
-                    submitDestination: function submitDestination(dest) {
-                        return _this4.submitDestination(dest);
+                    submitLocation: function submitLocation(loc, type) {
+                        return _this4.submitLocation(loc, type);
                     },
                     submitStops: function submitStops(stops) {
                         return _this4.submitStops(stops);
                     },
-                    destinations: this.state.destinations
+                    locations: this.state.locations,
+                    times: this.state.times
                 });
             } else {
                 return _react2.default.createElement(_User.User, { destination: this.state.selected });
@@ -19559,9 +19571,11 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _Destination = __webpack_require__(40);
+var _Location = __webpack_require__(45);
 
 var _Stops = __webpack_require__(41);
+
+var _DepartureTime = __webpack_require__(44);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -19583,67 +19597,81 @@ var Admin = exports.Admin = function (_Component) {
     _createClass(Admin, [{
         key: 'componentWillMount',
         value: function componentWillMount() {
+            var _this2 = this;
+
+            this.sceneTrack = 0;
+            this.display = {
+                origin: _react2.default.createElement(_Location.Location, {
+                    type: 'origin',
+                    locations: this.props.locations,
+                    nextScene: function nextScene() {
+                        return _this2.nextScene();
+                    },
+                    submitLocation: function submitLocation(loc) {
+                        return _this2.props.submitLocation(loc, 'origin');
+                    }
+                }),
+                destination: _react2.default.createElement(_Location.Location, {
+                    locations: this.props.locations,
+                    type: 'destination',
+                    nextScene: function nextScene() {
+                        return _this2.nextScene();
+                    },
+                    submitLocation: function submitLocation(loc) {
+                        return _this2.props.submitLocation(loc, 'destination');
+                    }
+                }),
+                departureTime: _react2.default.createElement(_DepartureTime.DepartureTime, {
+                    type: 'departureTime',
+                    times: this.props.times,
+                    nextScene: function nextScene() {
+                        return _this2.nextScene();
+                    },
+                    submitTime: function submitTime(time) {
+                        return _this2.props.submitLocation(time, 'departureTime');
+                    }
+                }),
+                stops: _react2.default.createElement(_Stops.Stops, {
+                    stops: this.props.locations,
+                    submitStops: function submitStops(stops) {
+                        return _this2.props.submitStops(stops);
+                    }
+                })
+            };
+            this.displayKeys = Object.keys(this.display);
+            var display = this.displayKeys[this.sceneTrack];
             this.setState({
-                currentCoords: [{ lat: 'pending', lng: 'pending' }],
+                currentCoords: { lat: 'pending', lng: 'pending' },
                 admin: 'admin-one',
-                displayStops: false
+                display: display
             });
         }
     }, {
-        key: 'displayStops',
-        value: function displayStops(bool) {
+        key: 'nextScene',
+        value: function nextScene() {
+            ++this.sceneTrack;
             this.setState({
-                displayStops: bool
+                display: this.displayKeys[this.sceneTrack]
             });
         }
     }, {
         key: 'render',
         value: function render() {
-            var _this2 = this;
+            var _this3 = this;
 
-            if (!this.state.displayStops) {
-                return this.state.currentCoords.map(function (coord, k) {
-                    return _react2.default.createElement(
-                        'div',
-                        { className: 'admin-launch', key: k },
-                        _react2.default.createElement(
-                            'h1',
-                            null,
-                            'hello, ',
-                            _this2.state.admin
-                        ),
-                        _react2.default.createElement(_Destination.Destination, {
-                            destinations: _this2.props.destinations,
-                            submitDestination: function submitDestination(dest) {
-                                return _this2.props.submitDestination(dest);
-                            },
-                            displayStops: function displayStops(bool) {
-                                return _this2.displayStops(bool);
-                            }
-                        })
-                    );
-                });
-            } else {
-                return this.state.currentCoords.map(function (coord, k) {
-                    return _react2.default.createElement(
-                        'div',
-                        { className: 'admin-launch', key: k },
-                        _react2.default.createElement(
-                            'h1',
-                            null,
-                            'hello, ',
-                            _this2.state.admin
-                        ),
-                        _react2.default.createElement(_Stops.Stops, {
-                            display: _this2.state.displayStops,
-                            stops: _this2.props.destinations,
-                            submitStops: function submitStops(stops) {
-                                return _this2.props.submitStops(stops);
-                            }
-                        })
-                    );
-                });
-            }
+            return _react2.default.createElement(
+                'div',
+                { className: 'admin-launch' },
+                _react2.default.createElement(
+                    'h1',
+                    null,
+                    'hello, ',
+                    this.state.admin
+                ),
+                function () {
+                    return _this3.display[_this3.state.display];
+                }()
+            );
         }
     }]);
 
@@ -19651,117 +19679,7 @@ var Admin = exports.Admin = function (_Component) {
 }(_react.Component);
 
 /***/ }),
-/* 40 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.Destination = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Destination = exports.Destination = function (_Component) {
-    _inherits(Destination, _Component);
-
-    function Destination() {
-        _classCallCheck(this, Destination);
-
-        return _possibleConstructorReturn(this, (Destination.__proto__ || Object.getPrototypeOf(Destination)).apply(this, arguments));
-    }
-
-    _createClass(Destination, [{
-        key: 'selectDestination',
-        value: function selectDestination(dest, div) {
-            var divs = document.querySelectorAll('.selection');
-            var _iteratorNormalCompletion = true;
-            var _didIteratorError = false;
-            var _iteratorError = undefined;
-
-            try {
-                for (var _iterator = divs[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                    var _div = _step.value;
-
-                    _div.style.border = '';
-                }
-            } catch (err) {
-                _didIteratorError = true;
-                _iteratorError = err;
-            } finally {
-                try {
-                    if (!_iteratorNormalCompletion && _iterator.return) {
-                        _iterator.return();
-                    }
-                } finally {
-                    if (_didIteratorError) {
-                        throw _iteratorError;
-                    }
-                }
-            }
-
-            div.style.border = '1px solid black';
-            this.setState({
-                destination: dest
-            });
-        }
-    }, {
-        key: 'submitDestination',
-        value: function submitDestination(dest) {
-            this.props.submitDestination(dest);
-            this.props.displayStops(true);
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            var _this2 = this;
-
-            return _react2.default.createElement(
-                'div',
-                null,
-                _react2.default.createElement(
-                    'p',
-                    null,
-                    'What is your end destination?'
-                ),
-                this.props.destinations.map(function (dest, ukey) {
-                    return _react2.default.createElement(
-                        'div',
-                        { className: 'selection', key: ukey, onClick: function onClick(e) {
-                                return _this2.selectDestination(dest, e.target);
-                            } },
-                        dest.stop
-                    );
-                }),
-                _react2.default.createElement(
-                    'button',
-                    { onClick: function onClick() {
-                            return _this2.submitDestination(_this2.state.destination);
-                        } },
-                    'Submit'
-                )
-            );
-        }
-    }]);
-
-    return Destination;
-}(_react.Component);
-
-/***/ }),
+/* 40 */,
 /* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -20027,6 +19945,214 @@ function unregister() {
     }
 }
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+
+/***/ }),
+/* 44 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.DepartureTime = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var DepartureTime = exports.DepartureTime = function (_Component) {
+    _inherits(DepartureTime, _Component);
+
+    function DepartureTime() {
+        _classCallCheck(this, DepartureTime);
+
+        return _possibleConstructorReturn(this, (DepartureTime.__proto__ || Object.getPrototypeOf(DepartureTime)).apply(this, arguments));
+    }
+
+    _createClass(DepartureTime, [{
+        key: 'render',
+        value: function render() {
+            var _this2 = this;
+
+            return _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement(
+                    'h2',
+                    null,
+                    'What is your departure time?'
+                ),
+                this.props.times.map(function (time, incr) {
+                    return _react2.default.createElement(
+                        'div',
+                        { key: incr, className: 'times' },
+                        _react2.default.createElement(
+                            'div',
+                            { onClick: function onClick(e) {
+                                    return _this2.selectTime(time, e.target);
+                                }
+                            },
+                            time.time
+                        )
+                    );
+                }),
+                _react2.default.createElement(
+                    'button',
+                    { onClick: function onClick() {
+                            return _this2.submitTime(_this2.state.time);
+                        } },
+                    'Submit'
+                )
+            );
+        }
+    }, {
+        key: 'selectTime',
+        value: function selectTime(time, el) {
+            var quer = document.querySelectorAll('.times');
+            for (var t = 0; t < quer.length; t++) {
+                var q = quer[t];
+                q.style.border = '';
+            }
+            el.style.border = '1px solid black';
+            this.setState({
+                selectedTime: time.time
+            });
+        }
+    }, {
+        key: 'submitTime',
+        value: function submitTime() {
+            this.props.submitTime(this.state.selectedTime);
+            this.props.nextScene();
+        }
+    }]);
+
+    return DepartureTime;
+}(_react.Component);
+
+/***/ }),
+/* 45 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Location = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Location = exports.Location = function (_Component) {
+    _inherits(Location, _Component);
+
+    function Location() {
+        _classCallCheck(this, Location);
+
+        return _possibleConstructorReturn(this, (Location.__proto__ || Object.getPrototypeOf(Location)).apply(this, arguments));
+    }
+
+    _createClass(Location, [{
+        key: 'selectLocation',
+        value: function selectLocation(loc, div) {
+            var divs = document.querySelectorAll('.selection');
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+                for (var _iterator = divs[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var _div = _step.value;
+
+                    _div.style.border = '';
+                }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
+                }
+            }
+
+            div.style.border = '1px solid black';
+            this.setState({
+                location: loc
+            });
+        }
+    }, {
+        key: 'submitLocation',
+        value: function submitLocation(loc) {
+            this.props.submitLocation(loc);
+            this.props.nextScene();
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this2 = this;
+
+            return _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement(
+                    'p',
+                    null,
+                    'What is your ',
+                    this.props.type,
+                    '?'
+                ),
+                this.props.locations.map(function (loc, ukey) {
+                    return _react2.default.createElement(
+                        'div',
+                        { className: 'selection', key: ukey, onClick: function onClick(e) {
+                                return _this2.selectLocation(loc, e.target);
+                            } },
+                        loc.stop
+                    );
+                }),
+                _react2.default.createElement(
+                    'button',
+                    { onClick: function onClick() {
+                            return _this2.submitLocation(_this2.state.location);
+                        } },
+                    'Submit'
+                )
+            );
+        }
+    }]);
+
+    return Location;
+}(_react.Component);
 
 /***/ })
 /******/ ]);
