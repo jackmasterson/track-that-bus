@@ -11,24 +11,20 @@ export class Admin extends Component {
                 type="origin"
                 locations={this.props.locations}
                 nextScene={() => this.nextScene()}
-                submitLocation={(loc) => this.props.submitLocation(loc, 'origin')}
+                submitLocation={(loc) => this.submitLocation(loc, 'origin')}
             />,
             destination: <Location
                 locations={this.props.locations}
                 type="destination"
                 nextScene={() => this.nextScene()}
-                submitLocation={(loc) => this.props.submitLocation(loc, 'destination')}
+                submitLocation={(loc) => this.submitLocation(loc, 'destination')}
             />,
             departureTime: <DepartureTime
                 type="departureTime"
                 times={this.props.times}
                 nextScene={() => this.nextScene()}
-                submitTime={(time) => this.props.submitLocation(time, 'departureTime')}
-            />,
-            // stops: <Stops
-            //     stops={this.props.locations}
-            //     submitStops={(stops) => this.props.submitStops(stops)}
-            // />,
+                submitTime={(time) => this.submitLocation(time, 'departureTime')}
+            />, 
         }
         this.displayKeys = Object.keys(this.display);
         let display = this.displayKeys[this.sceneTrack];
@@ -44,15 +40,34 @@ export class Admin extends Component {
             display: this.displayKeys[this.sceneTrack],
         });
         if (this.sceneTrack === this.displayKeys.length) {
-            this.props.getLocation();
+            this.setState({
+                displayStops: true,
+            });
         }
     }
+    submitLocation(loc, type) {
+        this.setState({
+            [type]: loc,
+        });
+        this.props.submitLocation(loc, type);
+    }
     render() {
-                return (
-                    <div className="admin-launch">
-                        <h1>hello, {this.state.admin}</h1>
-                            {(() => { return (this.display[this.state.display])})()}
-                    </div>
-                );
+        console.log(this.state);
+        if (this.state.displayStops) {
+            return (
+                <Stops
+                    stops={this.props.locations}
+                    origin={this.state.origin}
+                    destination={this.state.destination}
+                />
+            )
+        } else {
+            return (
+                <div className="admin-launch">
+                    <h1>hello, {this.state.admin}</h1>
+                    {(() => { return (this.display[this.state.display]) })()}
+                </div>
+            );
+        }
     }
 }

@@ -8,7 +8,7 @@ export class Map extends Component {
         let el = document.getElementById('map');
         GoogleMapsLoader.load((google) => {
             let map = new google.maps.Map(el, {
-                zoom: 9,
+                zoom: 8,
                 center: this.props.mapped.originCoords,
             });
        

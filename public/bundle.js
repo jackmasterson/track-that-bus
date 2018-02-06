@@ -19406,7 +19406,7 @@ var Map = exports.Map = function (_Component) {
             var el = document.getElementById('map');
             _googleMaps2.default.load(function (google) {
                 var map = new google.maps.Map(el, {
-                    zoom: 9,
+                    zoom: 8,
                     center: _this2.props.mapped.originCoords
                 });
 
@@ -19703,6 +19703,8 @@ var _DepartureTime = __webpack_require__(42);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -19732,7 +19734,7 @@ var Admin = exports.Admin = function (_Component) {
                         return _this2.nextScene();
                     },
                     submitLocation: function submitLocation(loc) {
-                        return _this2.props.submitLocation(loc, 'origin');
+                        return _this2.submitLocation(loc, 'origin');
                     }
                 }),
                 destination: _react2.default.createElement(_Location.Location, {
@@ -19742,7 +19744,7 @@ var Admin = exports.Admin = function (_Component) {
                         return _this2.nextScene();
                     },
                     submitLocation: function submitLocation(loc) {
-                        return _this2.props.submitLocation(loc, 'destination');
+                        return _this2.submitLocation(loc, 'destination');
                     }
                 }),
                 departureTime: _react2.default.createElement(_DepartureTime.DepartureTime, {
@@ -19752,13 +19754,9 @@ var Admin = exports.Admin = function (_Component) {
                         return _this2.nextScene();
                     },
                     submitTime: function submitTime(time) {
-                        return _this2.props.submitLocation(time, 'departureTime');
+                        return _this2.submitLocation(time, 'departureTime');
                     }
                 })
-                // stops: <Stops
-                //     stops={this.props.locations}
-                //     submitStops={(stops) => this.props.submitStops(stops)}
-                // />,
             };
             this.displayKeys = Object.keys(this.display);
             var display = this.displayKeys[this.sceneTrack];
@@ -19776,27 +19774,44 @@ var Admin = exports.Admin = function (_Component) {
                 display: this.displayKeys[this.sceneTrack]
             });
             if (this.sceneTrack === this.displayKeys.length) {
-                this.props.getLocation();
+                this.setState({
+                    displayStops: true
+                });
             }
+        }
+    }, {
+        key: 'submitLocation',
+        value: function submitLocation(loc, type) {
+            this.setState(_defineProperty({}, type, loc));
+            this.props.submitLocation(loc, type);
         }
     }, {
         key: 'render',
         value: function render() {
             var _this3 = this;
 
-            return _react2.default.createElement(
-                'div',
-                { className: 'admin-launch' },
-                _react2.default.createElement(
-                    'h1',
-                    null,
-                    'hello, ',
-                    this.state.admin
-                ),
-                function () {
-                    return _this3.display[_this3.state.display];
-                }()
-            );
+            console.log(this.state);
+            if (this.state.displayStops) {
+                return _react2.default.createElement(_Stops.Stops, {
+                    stops: this.props.locations,
+                    origin: this.state.origin,
+                    destination: this.state.destination
+                });
+            } else {
+                return _react2.default.createElement(
+                    'div',
+                    { className: 'admin-launch' },
+                    _react2.default.createElement(
+                        'h1',
+                        null,
+                        'hello, ',
+                        this.state.admin
+                    ),
+                    function () {
+                        return _this3.display[_this3.state.display];
+                    }()
+                );
+            }
         }
     }]);
 
@@ -19952,54 +19967,13 @@ var Stops = exports.Stops = function (_Component) {
     }
 
     _createClass(Stops, [{
-        key: 'componentWillMount',
-        value: function componentWillMount() {
-            this.stops = this.stops || [];
-            this.stopsCoords = this.stopsCoords || [];
-        }
-    }, {
-        key: 'selectStops',
-        value: function selectStops(stop) {
-            console.log(stop);
-            var d = document.querySelector('.stops');
-            this.stops.push(stop.stop);
-            this.stopsCoords.push(stop);
-            d.innerHTML = this.stops;
-        }
-    }, {
         key: 'render',
         value: function render() {
-            var _this2 = this;
-
+            console.log(this.props);
             return _react2.default.createElement(
                 'div',
                 null,
-                _react2.default.createElement(
-                    'p',
-                    null,
-                    'What Stops are you Making?'
-                ),
-                this.props.stops.map(function (stop, ukey) {
-                    return _react2.default.createElement(
-                        'div',
-                        { key: ukey },
-                        _react2.default.createElement(
-                            'div',
-                            { key: ukey, onClick: function onClick(e) {
-                                    return _this2.selectStops(stop, e.target);
-                                } },
-                            stop.stop
-                        )
-                    );
-                }),
-                _react2.default.createElement('div', { className: 'stops' }),
-                _react2.default.createElement(
-                    'button',
-                    { onClick: function onClick() {
-                            return _this2.props.submitStops(_this2.stopsCoords);
-                        } },
-                    'Submit'
-                )
+                'Stops Placeholder'
             );
         }
     }]);

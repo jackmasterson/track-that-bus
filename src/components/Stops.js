@@ -1,31 +1,10 @@
 import React, {Component} from 'react';
 
 export class Stops extends Component {
-    componentWillMount() {
-        this.stops = this.stops || [];
-        this.stopsCoords = this.stopsCoords || [];
-    }
-    selectStops(stop) {
-        console.log(stop);
-        let d = document.querySelector('.stops');
-        this.stops.push(stop.stop);
-        this.stopsCoords.push(stop);
-        d.innerHTML = this.stops;
-    }
     render() {
+        console.log(this.props);
         return (
-            <div>
-                <p>What Stops are you Making?</p>
-                {this.props.stops.map((stop, ukey) => {
-                    return (
-                        <div key={ukey}>
-                            <div key={ukey} onClick={(e) => this.selectStops(stop, e.target)}>{stop.stop}</div>
-                        </div>
-                    );
-                })}
-                <div className="stops"></div>
-                <button onClick={() => this.props.submitStops(this.stopsCoords)}>Submit</button>
-            </div>
+            <div>Stops Placeholder</div>
         );
     }
 }
