@@ -1408,7 +1408,7 @@ var _App = __webpack_require__(32);
 
 var _App2 = _interopRequireDefault(_App);
 
-var _registerServiceWorker = __webpack_require__(43);
+var _registerServiceWorker = __webpack_require__(44);
 
 var _registerServiceWorker2 = _interopRequireDefault(_registerServiceWorker);
 
@@ -18982,7 +18982,7 @@ var _User = __webpack_require__(36);
 
 var _Admin = __webpack_require__(39);
 
-var _SelectionScreen = __webpack_require__(42);
+var _SelectionScreen = __webpack_require__(43);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -19230,7 +19230,9 @@ var User = exports.User = function (_Component) {
 
             var keys = Object.keys(opts);
             var locations = this.props.options;
+
             this.locations = [];
+
             var _iteratorNormalCompletion = true;
             var _didIteratorError = false;
             var _iteratorError = undefined;
@@ -19242,10 +19244,14 @@ var User = exports.User = function (_Component) {
                     var details = {};
                     var orig = k.split('&')[0].split('origin_')[1];
                     var depTime = k.split('&')[1].split('depTime_')[1];
+                    var destination = k.split('&')[2].split('dest_')[1];
+                    console.log('dest: ', destination);
                     locations.map(function (loc) {
                         orig == loc.map ? details['origin'] = loc.stop : orig;
                         orig == loc.map ? details['departureTime'] = depTime : orig;
                         orig == loc.map ? details['buid'] = k : orig;
+                        orig == loc.map ? details['coords'] = loc.coords : orig;
+                        destination == loc.map ? details['destination'] = loc.stop : orig;
                     });
                     _this3.locations.push(details);
                 };
@@ -19308,14 +19314,20 @@ var User = exports.User = function (_Component) {
                             _react2.default.createElement(
                                 'h3',
                                 null,
-                                'End Destination: ',
+                                'Origin: ',
                                 loc.origin
                             ),
                             _react2.default.createElement(
                                 'h4',
                                 null,
-                                'Time: ',
+                                'Departure Time: ',
                                 loc.departureTime
+                            ),
+                            _react2.default.createElement(
+                                'h4',
+                                null,
+                                'Destination: ',
+                                loc.destination
                             )
                         );
                     }),
@@ -19388,22 +19400,24 @@ var Map = exports.Map = function (_Component) {
         value: function componentWillMount() {
             var _this2 = this;
 
+            console.log(this.props.mapped);
             this.markers = this.markers || [];
             var el = document.getElementById('map');
             _googleMaps2.default.load(function (google) {
                 var map = new google.maps.Map(el, {
                     zoom: 9,
-                    center: _this2.state.data.currentCoords
+                    center: _this2.props.mapped.coords
                 });
-                var current = new google.maps.Marker({
-                    position: _this2.state.data.currentCoords,
+
+                var destinationWindow = new google.maps.InfoWindow({
+                    content: '<h4>Origin: ' + _this2.props.mapped.origin + '</h4>\n                <h4>End Destination: ' + _this2.props.mapped.destination + '</h4>'
+                });
+                var destination = new google.maps.Marker({
+                    position: _this2.props.mapped.coords,
                     map: map
                 });
-                var currentWindow = new google.maps.InfoWindow({
-                    content: '<h1>Current Location</h1>'
-                });
-                current.addListener('click', function () {
-                    currentWindow.open(map, current);
+                destination.addListener('click', function () {
+                    destinationWindow.open(map, destination);
                 });
             });
         }
@@ -19669,11 +19683,11 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _Location = __webpack_require__(45);
+var _Location = __webpack_require__(40);
 
 var _Stops = __webpack_require__(41);
 
-var _DepartureTime = __webpack_require__(44);
+var _DepartureTime = __webpack_require__(42);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -19778,370 +19792,7 @@ var Admin = exports.Admin = function (_Component) {
 }(_react.Component);
 
 /***/ }),
-/* 40 */,
-/* 41 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.Stops = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Stops = exports.Stops = function (_Component) {
-    _inherits(Stops, _Component);
-
-    function Stops() {
-        _classCallCheck(this, Stops);
-
-        return _possibleConstructorReturn(this, (Stops.__proto__ || Object.getPrototypeOf(Stops)).apply(this, arguments));
-    }
-
-    _createClass(Stops, [{
-        key: 'componentWillMount',
-        value: function componentWillMount() {
-            this.stops = this.stops || [];
-            this.stopsCoords = this.stopsCoords || [];
-        }
-    }, {
-        key: 'selectStops',
-        value: function selectStops(stop) {
-            console.log(stop);
-            var d = document.querySelector('.stops');
-            this.stops.push(stop.stop);
-            this.stopsCoords.push(stop);
-            d.innerHTML = this.stops;
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            var _this2 = this;
-
-            return _react2.default.createElement(
-                'div',
-                null,
-                _react2.default.createElement(
-                    'p',
-                    null,
-                    'What Stops are you Making?'
-                ),
-                this.props.stops.map(function (stop, ukey) {
-                    return _react2.default.createElement(
-                        'div',
-                        { key: ukey },
-                        _react2.default.createElement(
-                            'div',
-                            { key: ukey, onClick: function onClick(e) {
-                                    return _this2.selectStops(stop, e.target);
-                                } },
-                            stop.stop
-                        )
-                    );
-                }),
-                _react2.default.createElement('div', { className: 'stops' }),
-                _react2.default.createElement(
-                    'button',
-                    { onClick: function onClick() {
-                            return _this2.props.submitStops(_this2.stopsCoords);
-                        } },
-                    'Submit'
-                )
-            );
-        }
-    }]);
-
-    return Stops;
-}(_react.Component);
-
-/***/ }),
-/* 42 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.SelectionScreen = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var SelectionScreen = exports.SelectionScreen = function (_Component) {
-    _inherits(SelectionScreen, _Component);
-
-    function SelectionScreen() {
-        _classCallCheck(this, SelectionScreen);
-
-        return _possibleConstructorReturn(this, (SelectionScreen.__proto__ || Object.getPrototypeOf(SelectionScreen)).apply(this, arguments));
-    }
-
-    _createClass(SelectionScreen, [{
-        key: 'render',
-        value: function render() {
-            var _this2 = this;
-
-            return _react2.default.createElement(
-                'div',
-                null,
-                _react2.default.createElement(
-                    'div',
-                    null,
-                    _react2.default.createElement(
-                        'h2',
-                        null,
-                        'Destinations'
-                    ),
-                    this.options.destinations.map(function (dest, incr) {
-                        return _react2.default.createElement(
-                            'div',
-                            { key: incr, onClick: function onClick() {
-                                    return _this2.props.selectDestination(dest);
-                                } },
-                            dest.dest
-                        );
-                    })
-                )
-            );
-        }
-    }]);
-
-    return SelectionScreen;
-}(_react.Component);
-
-/***/ }),
-/* 43 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = register;
-exports.unregister = unregister;
-// In production, we register a service worker to serve assets from local cache.
-
-// This lets the app load faster on subsequent visits in production, and gives
-// it offline capabilities. However, it also means that developers (and users)
-// will only see deployed updates on the "N+1" visit to a page, since previously
-// cached resources are updated in the background.
-
-// To learn more about the benefits of this model, read https://goo.gl/KwvDNy.
-// This link also includes instructions on opting out of this behavior.
-
-var isLocalhost = Boolean(window.location.hostname === 'localhost' ||
-// [::1] is the IPv6 localhost address.
-window.location.hostname === '[::1]' ||
-// 127.0.0.1/8 is considered localhost for IPv4.
-window.location.hostname.match(/^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/));
-
-function register() {
-    if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
-        // The URL constructor is available in all browsers that support SW.
-        var publicUrl = new URL(process.env.PUBLIC_URL, window.location);
-        if (publicUrl.origin !== window.location.origin) {
-            // Our service worker won't work if PUBLIC_URL is on a different origin
-            // from what our page is served on. This might happen if a CDN is used to
-            // serve assets; see https://github.com/facebookincubator/create-react-app/issues/2374
-            return;
-        }
-
-        window.addEventListener('load', function () {
-            var swUrl = window.location.href + '/service-worker.js';
-
-            if (!isLocalhost) {
-                // Is not local host. Just register service worker
-                registerValidSW(swUrl);
-            } else {
-                // This is running on localhost. Lets check if a service worker still exists or not.
-                checkValidServiceWorker(swUrl);
-            }
-        });
-    }
-}
-
-function registerValidSW(swUrl) {
-    navigator.serviceWorker.register(swUrl).then(function (registration) {
-        registration.onupdatefound = function () {
-            var installingWorker = registration.installing;
-            installingWorker.onstatechange = function () {
-                if (installingWorker.state === 'installed') {
-                    if (navigator.serviceWorker.controller) {
-                        // At this point, the old content will have been purged and
-                        // the fresh content will have been added to the cache.
-                        // It's the perfect time to display a "New content is
-                        // available; please refresh." message in your web app.
-                        console.log('New content is available; please refresh.');
-                    } else {
-                        // At this point, everything has been precached.
-                        // It's the perfect time to display a
-                        // "Content is cached for offline use." message.
-                        console.log('Content is cached for offline use.');
-                    }
-                }
-            };
-        };
-    }).catch(function (error) {
-        console.error('Error during service worker registration:', error);
-    });
-}
-
-function checkValidServiceWorker(swUrl) {
-    // Check if the service worker can be found. If it can't reload the page.
-    fetch(swUrl).then(function (response) {
-        // Ensure service worker exists, and that we really are getting a JS file.
-        if (response.status === 404 || response.headers.get('content-type').indexOf('javascript') === -1) {
-            // No service worker found. Probably a different app. Reload the page.
-            navigator.serviceWorker.ready.then(function (registration) {
-                registration.unregister().then(function () {
-                    window.location.reload();
-                });
-            });
-        } else {
-            // Service worker found. Proceed as normal.
-            registerValidSW(swUrl);
-        }
-    }).catch(function () {
-        console.log('No internet connection found. App is running in offline mode.');
-    });
-}
-
-function unregister() {
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.ready.then(function (registration) {
-            registration.unregister();
-        });
-    }
-}
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
-
-/***/ }),
-/* 44 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.DepartureTime = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var DepartureTime = exports.DepartureTime = function (_Component) {
-    _inherits(DepartureTime, _Component);
-
-    function DepartureTime() {
-        _classCallCheck(this, DepartureTime);
-
-        return _possibleConstructorReturn(this, (DepartureTime.__proto__ || Object.getPrototypeOf(DepartureTime)).apply(this, arguments));
-    }
-
-    _createClass(DepartureTime, [{
-        key: 'render',
-        value: function render() {
-            var _this2 = this;
-
-            return _react2.default.createElement(
-                'div',
-                null,
-                _react2.default.createElement(
-                    'h2',
-                    null,
-                    'What is your departure time?'
-                ),
-                this.props.times.map(function (time, incr) {
-                    return _react2.default.createElement(
-                        'div',
-                        { key: incr, className: 'times' },
-                        _react2.default.createElement(
-                            'div',
-                            { onClick: function onClick(e) {
-                                    return _this2.selectTime(time, e.target);
-                                }
-                            },
-                            time.time
-                        )
-                    );
-                }),
-                _react2.default.createElement(
-                    'button',
-                    { onClick: function onClick() {
-                            return _this2.submitTime(_this2.state.time);
-                        } },
-                    'Submit'
-                )
-            );
-        }
-    }, {
-        key: 'selectTime',
-        value: function selectTime(time, el) {
-            var quer = document.querySelectorAll('.times');
-            for (var t = 0; t < quer.length; t++) {
-                var q = quer[t];
-                q.style.border = '';
-            }
-            el.style.border = '1px solid black';
-            this.setState({
-                selectedTime: time.time
-            });
-        }
-    }, {
-        key: 'submitTime',
-        value: function submitTime() {
-            this.props.submitTime(this.state.selectedTime);
-            this.props.nextScene();
-        }
-    }]);
-
-    return DepartureTime;
-}(_react.Component);
-
-/***/ }),
-/* 45 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20252,6 +19903,368 @@ var Location = exports.Location = function (_Component) {
 
     return Location;
 }(_react.Component);
+
+/***/ }),
+/* 41 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Stops = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Stops = exports.Stops = function (_Component) {
+    _inherits(Stops, _Component);
+
+    function Stops() {
+        _classCallCheck(this, Stops);
+
+        return _possibleConstructorReturn(this, (Stops.__proto__ || Object.getPrototypeOf(Stops)).apply(this, arguments));
+    }
+
+    _createClass(Stops, [{
+        key: 'componentWillMount',
+        value: function componentWillMount() {
+            this.stops = this.stops || [];
+            this.stopsCoords = this.stopsCoords || [];
+        }
+    }, {
+        key: 'selectStops',
+        value: function selectStops(stop) {
+            console.log(stop);
+            var d = document.querySelector('.stops');
+            this.stops.push(stop.stop);
+            this.stopsCoords.push(stop);
+            d.innerHTML = this.stops;
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this2 = this;
+
+            return _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement(
+                    'p',
+                    null,
+                    'What Stops are you Making?'
+                ),
+                this.props.stops.map(function (stop, ukey) {
+                    return _react2.default.createElement(
+                        'div',
+                        { key: ukey },
+                        _react2.default.createElement(
+                            'div',
+                            { key: ukey, onClick: function onClick(e) {
+                                    return _this2.selectStops(stop, e.target);
+                                } },
+                            stop.stop
+                        )
+                    );
+                }),
+                _react2.default.createElement('div', { className: 'stops' }),
+                _react2.default.createElement(
+                    'button',
+                    { onClick: function onClick() {
+                            return _this2.props.submitStops(_this2.stopsCoords);
+                        } },
+                    'Submit'
+                )
+            );
+        }
+    }]);
+
+    return Stops;
+}(_react.Component);
+
+/***/ }),
+/* 42 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.DepartureTime = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var DepartureTime = exports.DepartureTime = function (_Component) {
+    _inherits(DepartureTime, _Component);
+
+    function DepartureTime() {
+        _classCallCheck(this, DepartureTime);
+
+        return _possibleConstructorReturn(this, (DepartureTime.__proto__ || Object.getPrototypeOf(DepartureTime)).apply(this, arguments));
+    }
+
+    _createClass(DepartureTime, [{
+        key: 'render',
+        value: function render() {
+            var _this2 = this;
+
+            return _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement(
+                    'h2',
+                    null,
+                    'What is your departure time?'
+                ),
+                this.props.times.map(function (time, incr) {
+                    return _react2.default.createElement(
+                        'div',
+                        { key: incr, className: 'times' },
+                        _react2.default.createElement(
+                            'div',
+                            { onClick: function onClick(e) {
+                                    return _this2.selectTime(time, e.target);
+                                }
+                            },
+                            time.time
+                        )
+                    );
+                }),
+                _react2.default.createElement(
+                    'button',
+                    { onClick: function onClick() {
+                            return _this2.submitTime(_this2.state.time);
+                        } },
+                    'Submit'
+                )
+            );
+        }
+    }, {
+        key: 'selectTime',
+        value: function selectTime(time, el) {
+            var quer = document.querySelectorAll('.times');
+            for (var t = 0; t < quer.length; t++) {
+                var q = quer[t];
+                q.style.border = '';
+            }
+            el.style.border = '1px solid black';
+            this.setState({
+                selectedTime: time.time
+            });
+        }
+    }, {
+        key: 'submitTime',
+        value: function submitTime() {
+            this.props.submitTime(this.state.selectedTime);
+            this.props.nextScene();
+        }
+    }]);
+
+    return DepartureTime;
+}(_react.Component);
+
+/***/ }),
+/* 43 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.SelectionScreen = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var SelectionScreen = exports.SelectionScreen = function (_Component) {
+    _inherits(SelectionScreen, _Component);
+
+    function SelectionScreen() {
+        _classCallCheck(this, SelectionScreen);
+
+        return _possibleConstructorReturn(this, (SelectionScreen.__proto__ || Object.getPrototypeOf(SelectionScreen)).apply(this, arguments));
+    }
+
+    _createClass(SelectionScreen, [{
+        key: 'render',
+        value: function render() {
+            var _this2 = this;
+
+            return _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement(
+                    'div',
+                    null,
+                    _react2.default.createElement(
+                        'h2',
+                        null,
+                        'Destinations'
+                    ),
+                    this.options.destinations.map(function (dest, incr) {
+                        return _react2.default.createElement(
+                            'div',
+                            { key: incr, onClick: function onClick() {
+                                    return _this2.props.selectDestination(dest);
+                                } },
+                            dest.dest
+                        );
+                    })
+                )
+            );
+        }
+    }]);
+
+    return SelectionScreen;
+}(_react.Component);
+
+/***/ }),
+/* 44 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = register;
+exports.unregister = unregister;
+// In production, we register a service worker to serve assets from local cache.
+
+// This lets the app load faster on subsequent visits in production, and gives
+// it offline capabilities. However, it also means that developers (and users)
+// will only see deployed updates on the "N+1" visit to a page, since previously
+// cached resources are updated in the background.
+
+// To learn more about the benefits of this model, read https://goo.gl/KwvDNy.
+// This link also includes instructions on opting out of this behavior.
+
+var isLocalhost = Boolean(window.location.hostname === 'localhost' ||
+// [::1] is the IPv6 localhost address.
+window.location.hostname === '[::1]' ||
+// 127.0.0.1/8 is considered localhost for IPv4.
+window.location.hostname.match(/^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/));
+
+function register() {
+    if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
+        // The URL constructor is available in all browsers that support SW.
+        var publicUrl = new URL(process.env.PUBLIC_URL, window.location);
+        if (publicUrl.origin !== window.location.origin) {
+            // Our service worker won't work if PUBLIC_URL is on a different origin
+            // from what our page is served on. This might happen if a CDN is used to
+            // serve assets; see https://github.com/facebookincubator/create-react-app/issues/2374
+            return;
+        }
+
+        window.addEventListener('load', function () {
+            var swUrl = window.location.href + '/service-worker.js';
+
+            if (!isLocalhost) {
+                // Is not local host. Just register service worker
+                registerValidSW(swUrl);
+            } else {
+                // This is running on localhost. Lets check if a service worker still exists or not.
+                checkValidServiceWorker(swUrl);
+            }
+        });
+    }
+}
+
+function registerValidSW(swUrl) {
+    navigator.serviceWorker.register(swUrl).then(function (registration) {
+        registration.onupdatefound = function () {
+            var installingWorker = registration.installing;
+            installingWorker.onstatechange = function () {
+                if (installingWorker.state === 'installed') {
+                    if (navigator.serviceWorker.controller) {
+                        // At this point, the old content will have been purged and
+                        // the fresh content will have been added to the cache.
+                        // It's the perfect time to display a "New content is
+                        // available; please refresh." message in your web app.
+                        console.log('New content is available; please refresh.');
+                    } else {
+                        // At this point, everything has been precached.
+                        // It's the perfect time to display a
+                        // "Content is cached for offline use." message.
+                        console.log('Content is cached for offline use.');
+                    }
+                }
+            };
+        };
+    }).catch(function (error) {
+        console.error('Error during service worker registration:', error);
+    });
+}
+
+function checkValidServiceWorker(swUrl) {
+    // Check if the service worker can be found. If it can't reload the page.
+    fetch(swUrl).then(function (response) {
+        // Ensure service worker exists, and that we really are getting a JS file.
+        if (response.status === 404 || response.headers.get('content-type').indexOf('javascript') === -1) {
+            // No service worker found. Probably a different app. Reload the page.
+            navigator.serviceWorker.ready.then(function (registration) {
+                registration.unregister().then(function () {
+                    window.location.reload();
+                });
+            });
+        } else {
+            // Service worker found. Proceed as normal.
+            registerValidSW(swUrl);
+        }
+    }).catch(function () {
+        console.log('No internet connection found. App is running in offline mode.');
+    });
+}
+
+function unregister() {
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.ready.then(function (registration) {
+            registration.unregister();
+        });
+    }
+}
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ })
 /******/ ]);

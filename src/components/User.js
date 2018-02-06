@@ -31,15 +31,21 @@ export class User extends Component {
     buildOptions(opts) {
         let keys = Object.keys(opts);
         let locations = this.props.options;
+
         this.locations = [];
+
         for (let k of keys) {
             let details = {};
             let orig = k.split('&')[0].split('origin_')[1];
             let depTime = k.split('&')[1].split('depTime_')[1];
+            let destination = k.split('&')[2].split('dest_')[1];
+            console.log('dest: ', destination);
             locations.map(loc => {
                 orig == loc.map ? details['origin'] = loc.stop : orig;
                 orig == loc.map ? details['departureTime'] = depTime : orig;
                 orig == loc.map ? details['buid'] = k : orig;
+                orig == loc.map ? details['coords'] = loc.coords : orig;
+                destination == loc.map ? details['destination'] = loc.stop : orig;
             });
             this.locations.push(details);
         }
@@ -69,8 +75,9 @@ export class User extends Component {
                                 onClick={(e) =>
                                     this.selectLocation(loc, e.target)}
                                 key={incr}>
-                                <h3>End Destination: {loc.origin}</h3>
-                                <h4>Time: {loc.departureTime}</h4>
+                                <h3>Origin: {loc.origin}</h3>
+                                <h4>Departure Time: {loc.departureTime}</h4>
+                                <h4>Destination: {loc.destination}</h4>
                             </div>
                         );
                     })}
