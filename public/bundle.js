@@ -28031,7 +28031,7 @@ var Launch = exports.Launch = function (_Component) {
     _createClass(Launch, [{
         key: 'componentWillMount',
         value: function componentWillMount() {
-            console.log('this: ', this.props);
+
             this.setState({
                 locations: [{
                     stop: 'Port Authority',
@@ -28122,7 +28122,7 @@ var Launch = exports.Launch = function (_Component) {
                 loc.stop === dest ? buid += '&dest_' + loc.map : buid;
                 loc.stop === origin ? buid += '&depTime_' + dep : buid;
             });
-            console.log('buid: ', buid);
+
             var currentCoords = {
                 lat: pos.coords.latitude,
                 lng: pos.coords.longitude
@@ -28135,7 +28135,8 @@ var Launch = exports.Launch = function (_Component) {
                 body: JSON.stringify({
                     currentCoords: currentCoords,
                     buid: buid,
-                    stops: this.state.stops
+                    stops: this.state.stops,
+                    destination: this.state.destination
                 })
             }).then(function (res) {
                 return res.json();
@@ -31934,7 +31935,6 @@ var User = exports.User = function (_Component) {
             var keys = Object.keys(opts);
             var locations = this.props.options;
 
-            console.log('opts: ', opts);
             this.locations = [];
 
             var _iteratorNormalCompletion = true;
@@ -31951,6 +31951,10 @@ var User = exports.User = function (_Component) {
                         formattedStops.push(stop);
                     });
                     _this3.gmapi = opts[k].gmapi;
+                    _this3.duration = opts[k].duration;
+                    _this3.distance = opts[k].dist;
+                    _this3.stopData = opts[k].stopData;
+
                     var details = {};
                     k = k.split('&');
 
@@ -31996,7 +32000,10 @@ var User = exports.User = function (_Component) {
             this.setState({
                 locations: this.locations,
                 stops: opts.stops,
-                gmapi: this.gmapi
+                gmapi: this.gmapi,
+                distance: this.distance,
+                duration: this.duration,
+                stopData: this.stopData
             });
         }
     }, {
@@ -32029,7 +32036,6 @@ var User = exports.User = function (_Component) {
                 }
             }
 
-            console.log('el: ', el);
             el.style.border = '1px solid black';
             this.setState({
                 selected: loc
@@ -32121,7 +32127,11 @@ var User = exports.User = function (_Component) {
                     )
                 );
             } else if (this.state.mapped) {
-                return _react2.default.createElement(_Map.Map, { gmapi: this.state.gmapi, mapped: this.state.mapped });
+                return _react2.default.createElement(_Map.Map, { gmapi: this.state.gmapi,
+                    mapped: this.state.mapped,
+                    distance: this.state.distance,
+                    duration: this.state.duration,
+                    stopData: this.state.stopData });
             } else {
                 return _react2.default.createElement(
                     'div',
@@ -43443,6 +43453,7 @@ var Map = exports.Map = function (_Component) {
         value: function componentWillMount() {
             var _this2 = this;
 
+            console.log('map props: ', this.props);
             this.infowindows = this.infowindows || [];
             var el = document.getElementById('map');
             _googleMaps2.default.KEY = this.props.gmapi;
@@ -43452,17 +43463,20 @@ var Map = exports.Map = function (_Component) {
                     center: _this2.props.mapped.originCoords
                 });
 
-                var destinationData = _this2.createMarker(google, _this2.props.mapped.destination, _this2.props.mapped.destinationCoords, 'Destination', map);
+                var destinationData = _this2.createMarker(google, _this2.props.mapped.destination, _this2.props.mapped.destinationCoords, 'Destination', map, _this2.props.distance, _this2.props.duration);
                 var destinationMarker = destinationData.marker;
                 var destinationWindow = destinationData.infowindow;
 
                 var originData = _this2.createMarker(google, _this2.props.mapped.origin, _this2.props.mapped.originCoords, 'Origin', map);
                 var originMarker = originData.marker;
                 var originWindow = originData.infowindow;
-
                 var stopsData = {};
+                console.log('props data: ', _this2.props.stopData);
                 _this2.props.mapped.stops.map(function (stop, incr) {
-                    var stopped = _this2.createMarker(google, stop.stop, stop.coords, 'Stop', map);
+                    console.log('stop here: ', stop);
+                    stop.duration = _this2.props.stopData[stop.stop].duration;
+                    stop.distance = _this2.props.stopData[stop.stop].distance;
+                    var stopped = _this2.createMarker(google, stop.stop, stop.coords, 'Stop', map, stop.distance, stop.duration);
                     stopsData[incr] = stopped;
                 });
 
@@ -43471,16 +43485,21 @@ var Map = exports.Map = function (_Component) {
         }
     }, {
         key: 'createMarker',
-        value: function createMarker(google, location, coords, type, map) {
+        value: function createMarker(google, location, coords, type, map, distance, duration) {
             var _this3 = this;
 
             var marker = new google.maps.Marker({
                 position: coords,
                 map: map
             });
-
+            var content = void 0;
+            if (distance && duration) {
+                content = '<h4>' + type + ': ' + location + '</h4>\n                       <h4>Distance: ' + distance + '</h4>\n                       <h4>Duration: ' + duration + '</h4>';
+            } else {
+                content = '<h4>' + type + ': ' + location + '</h4>';
+            }
             var infowindow = new google.maps.InfoWindow({
-                content: '<h4>' + type + ': ' + location + '</h4>'
+                content: content
             });
 
             this.infowindows.push(infowindow);

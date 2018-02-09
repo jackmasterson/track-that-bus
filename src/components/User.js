@@ -27,7 +27,6 @@ export class User extends Component {
         let keys = Object.keys(opts);
         let locations = this.props.options;
         
-        console.log('opts: ', opts);
         this.locations = [];
 
         for (let k of keys) {
@@ -37,6 +36,10 @@ export class User extends Component {
                 formattedStops.push(stop);
             });
             this.gmapi = opts[k].gmapi;
+            this.duration = opts[k].duration;
+            this.distance = opts[k].dist;
+            this.stopData = opts[k].stopData;
+
             let details = {};
             k = k.split('&');
 
@@ -64,6 +67,9 @@ export class User extends Component {
             locations: this.locations,
             stops: opts.stops,
             gmapi: this.gmapi,
+            distance: this.distance,
+            duration: this.duration,
+            stopData: this.stopData,
         });
     }
     selectLocation(loc, el) {
@@ -72,7 +78,7 @@ export class User extends Component {
         for (let div of divs) {
             div.style.border = '';
         }
-        console.log('el: ', el);
+
         el.style.border = '1px solid black';
         this.setState({
             selected: loc
@@ -123,7 +129,11 @@ export class User extends Component {
                 </div>
             )
         } else if (this.state.mapped) {
-            return <Map gmapi={this.state.gmapi} mapped={this.state.mapped}/>
+            return <Map gmapi={this.state.gmapi} 
+                        mapped={this.state.mapped}
+                        distance={this.state.distance}
+                        duration={this.state.duration}
+                        stopData={this.state.stopData}/>
         } else {
             return (<div>Something went wrong</div>);
         }

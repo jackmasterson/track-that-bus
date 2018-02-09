@@ -7,7 +7,7 @@ import {Init} from './Init';
 
 export class Launch extends Component {
     componentWillMount() {
-        console.log('this: ', this.props);
+
         this.setState({
             locations: [{
                 stop: 'Port Authority',
@@ -88,7 +88,7 @@ export class Launch extends Component {
             loc.stop === dest ? buid += `&dest_${loc.map}` : buid;
             loc.stop === origin ? buid += `&depTime_${dep}` : buid;
         });
-        console.log('buid: ', buid);
+
         let currentCoords = {
             lat: pos.coords.latitude,
             lng: pos.coords.longitude,
@@ -102,6 +102,7 @@ export class Launch extends Component {
                 currentCoords, 
                 buid,
                 stops: this.state.stops,
+                destination: this.state.destination,
             })
         })
         .then((res) => {
