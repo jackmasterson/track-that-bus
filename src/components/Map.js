@@ -5,7 +5,7 @@ export class Map extends Component {
     componentWillMount() {
         this.infowindows = this.infowindows || [];
         let el = document.getElementById('map');
-        GoogleMapsLoader.KEY = process.env.GOOGLE_MAPS_API;
+        GoogleMapsLoader.KEY = this.props.gmapi;
         GoogleMapsLoader.load((google) => {
             let map = new google.maps.Map(el, {
                 zoom: 8,

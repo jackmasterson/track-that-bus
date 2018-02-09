@@ -43374,7 +43374,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(process) {
+
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -43415,7 +43415,7 @@ var Map = exports.Map = function (_Component) {
 
             this.infowindows = this.infowindows || [];
             var el = document.getElementById('map');
-            _googleMaps2.default.KEY = process.env.GOOGLE_MAPS_API;
+            _googleMaps2.default.KEY = this.props.gmapi;
             _googleMaps2.default.load(function (google) {
                 var map = new google.maps.Map(el, {
                     zoom: 8,
@@ -43498,7 +43498,6 @@ var Map = exports.Map = function (_Component) {
 
     return Map;
 }(_react.Component);
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11)))
 
 /***/ }),
 /* 342 */
