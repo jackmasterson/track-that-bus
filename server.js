@@ -27,6 +27,7 @@ app.post('/update', (req, res) => {
     let buid = req.body.buid;
     this.buids[buid] = req.body.currentCoords;
     this.buids[buid].stops = req.body.stops;
+    this.buids[buid].gmapi = process.env.GOOGLE_MAPS_API;
     // this.currentLat = req.body.currentCoords.lat;
     // this.currentLng = req.body.currentCoords.lng;
 

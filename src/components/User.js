@@ -7,7 +7,8 @@ import {Filter} from './Filter';
 export class User extends Component {
     componentWillMount() {
         this.setState({
-            locations: null
+            locations: null,
+            gmapi: '',
         })
     }
     componentDidMount() {
@@ -35,6 +36,7 @@ export class User extends Component {
                 stop = JSON.parse(stop);
                 formattedStops.push(stop);
             });
+            this.gmapi = opts[k].gmapi;
             let details = {};
             k = k.split('&');
 
@@ -57,11 +59,11 @@ export class User extends Component {
                 destination == loc.map ? details['stops'] = formattedStops : details;
             });
             this.locations.push(details);
-
         }
         this.setState({
             locations: this.locations,
             stops: opts.stops,
+            gmapi: this.gmapi,
         });
     }
     selectLocation(loc, el) {
@@ -71,7 +73,8 @@ export class User extends Component {
     }
     submit() {
         this.setState({
-            mapped: this.state.selected
+            mapped: this.state.selected,
+            gmapi: this.state.gmapi
         });
     }
     filtered(locs) {
@@ -111,7 +114,7 @@ export class User extends Component {
                 </div>
             )
         } else if (this.state.mapped) {
-            return <Map mapped={this.state.mapped}/>
+            return <Map gmapi={this.state.gmapi} mapped={this.state.mapped}/>
         } else {
             return (<div>Something went wrong</div>);
         }

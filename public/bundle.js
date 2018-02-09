@@ -31908,7 +31908,8 @@ var User = exports.User = function (_Component) {
         key: 'componentWillMount',
         value: function componentWillMount() {
             this.setState({
-                locations: null
+                locations: null,
+                gmapi: ''
             });
         }
     }, {
@@ -31949,6 +31950,7 @@ var User = exports.User = function (_Component) {
                         stop = JSON.parse(stop);
                         formattedStops.push(stop);
                     });
+                    _this3.gmapi = opts[k].gmapi;
                     var details = {};
                     k = k.split('&');
 
@@ -31993,7 +31995,8 @@ var User = exports.User = function (_Component) {
 
             this.setState({
                 locations: this.locations,
-                stops: opts.stops
+                stops: opts.stops,
+                gmapi: this.gmapi
             });
         }
     }, {
@@ -32007,7 +32010,8 @@ var User = exports.User = function (_Component) {
         key: 'submit',
         value: function submit() {
             this.setState({
-                mapped: this.state.selected
+                mapped: this.state.selected,
+                gmapi: this.state.gmapi
             });
         }
     }, {
@@ -32087,7 +32091,7 @@ var User = exports.User = function (_Component) {
                     )
                 );
             } else if (this.state.mapped) {
-                return _react2.default.createElement(_Map.Map, { mapped: this.state.mapped });
+                return _react2.default.createElement(_Map.Map, { gmapi: this.state.gmapi, mapped: this.state.mapped });
             } else {
                 return _react2.default.createElement(
                     'div',
@@ -43411,6 +43415,7 @@ var Map = exports.Map = function (_Component) {
 
             this.infowindows = this.infowindows || [];
             var el = document.getElementById('map');
+            _googleMaps2.default.KEY = this.props.gmapi;
             _googleMaps2.default.load(function (google) {
                 var map = new google.maps.Map(el, {
                     zoom: 8,
