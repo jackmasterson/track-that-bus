@@ -66,8 +66,18 @@ ul {
 .fixed-submit {
     position: fixed;
     right: 100px;
-    top: 100px;
+    bottom: 100px;
     z-index: 1000000;
+}
+
+.fixed-submit-wrapper {
+    background-color: black;
+    width: 100vw;
+    color: white;
+    height: 15vh;
+    position: fixed;
+    bottom: 0;
+    z-index: 99999;
 }
 
 .smaller {
