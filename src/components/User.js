@@ -67,9 +67,17 @@ export class User extends Component {
         });
     }
     selectLocation(loc, el) {
+
+        let divs = document.querySelectorAll('.selection');
+        for (let div of divs) {
+            div.style.border = '';
+        }
+        console.log('el: ', el);
+        el.style.border = '1px solid black';
         this.setState({
             selected: loc
         });
+
     }
     submit() {
         this.setState({
@@ -92,6 +100,7 @@ export class User extends Component {
                         {this.state.locations.map((loc, incr) => {
                             return (
                                 <ListGroupItem bsSize="large"
+                                    className="selection"
                                     key={incr}
                                     onClick={(e) => this.selectLocation(loc, e.target)}>
                                     <h3 className="spaced">Origin: {loc.origin}</h3>

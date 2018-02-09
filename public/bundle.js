@@ -32002,6 +32002,35 @@ var User = exports.User = function (_Component) {
     }, {
         key: 'selectLocation',
         value: function selectLocation(loc, el) {
+
+            var divs = document.querySelectorAll('.selection');
+            var _iteratorNormalCompletion2 = true;
+            var _didIteratorError2 = false;
+            var _iteratorError2 = undefined;
+
+            try {
+                for (var _iterator2 = divs[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                    var div = _step2.value;
+
+                    div.style.border = '';
+                }
+            } catch (err) {
+                _didIteratorError2 = true;
+                _iteratorError2 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                        _iterator2.return();
+                    }
+                } finally {
+                    if (_didIteratorError2) {
+                        throw _iteratorError2;
+                    }
+                }
+            }
+
+            console.log('el: ', el);
+            el.style.border = '1px solid black';
             this.setState({
                 selected: loc
             });
@@ -32041,6 +32070,7 @@ var User = exports.User = function (_Component) {
                             return _react2.default.createElement(
                                 _reactBootstrap.ListGroupItem,
                                 { bsSize: 'large',
+                                    className: 'selection',
                                     key: incr,
                                     onClick: function onClick(e) {
                                         return _this4.selectLocation(loc, e.target);
@@ -43418,7 +43448,7 @@ var Map = exports.Map = function (_Component) {
             _googleMaps2.default.KEY = this.props.gmapi;
             _googleMaps2.default.load(function (google) {
                 var map = new google.maps.Map(el, {
-                    zoom: 8,
+                    zoom: 10,
                     center: _this2.props.mapped.originCoords
                 });
 

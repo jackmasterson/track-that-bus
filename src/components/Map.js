@@ -8,7 +8,7 @@ export class Map extends Component {
         GoogleMapsLoader.KEY = this.props.gmapi;
         GoogleMapsLoader.load((google) => {
             let map = new google.maps.Map(el, {
-                zoom: 8,
+                zoom: 10,
                 center: this.props.mapped.originCoords,
             });
             
@@ -32,7 +32,7 @@ export class Map extends Component {
     createMarker(google, location, coords, type, map) {
         let marker = new google.maps.Marker({
             position: coords,
-            map: map
+            map: map        
         });
 
         let infowindow = new google.maps.InfoWindow({
