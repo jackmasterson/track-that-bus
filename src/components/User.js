@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
-import {Map} from './Map';
 import {ListGroup, ListGroupItem} from 'react-bootstrap';
+
+import {Map} from './Map';
+import {Filter} from './Filter';
 
 export class User extends Component {
     componentWillMount() {
@@ -72,32 +74,42 @@ export class User extends Component {
             mapped: this.state.selected
         });
     }
+    filtered(locs) {
+        this.setState({
+            locations: locs,
+        })
+    }
     render() {
         if (this.state.locations && !this.state.mapped) {
             return (
-                <ListGroup>
-                    {this.state.locations.map((loc, incr) => {
-                        return (
-                            <ListGroupItem bsSize="large"
-                                key={incr}
-                                onClick={(e) => this.selectLocation(loc, e.target)}>
-                                <h3 className="spaced">Origin: {loc.origin}</h3>
-                                <h4 className="spaced smaller">Destination: {loc.destination}</h4>
-                                <h4 className="spaced smaller">Departure Time: {loc.departureTime}</h4>
-                                <ul className="bullets spaced">Stops: 
-                                    {loc.stops.map((stop, j) => {
-                                        return (<li 
-                                                    className="inline-block"
-                                                    key={j}>{stop.stop}</li>)
-                                    })}
-                                </ul>
-                            </ListGroupItem>
-                        );
-                    })}
-                    <button 
-                        className="fixed-submit"
-                        onClick={() => this.submit()}>Submit</button>
-                </ListGroup>)
+                <div>
+                    <Filter locations={this.state.locations}
+                            filtered={(locs) => this.filtered(locs)}/>
+                    <ListGroup>
+                        {this.state.locations.map((loc, incr) => {
+                            return (
+                                <ListGroupItem bsSize="large"
+                                    key={incr}
+                                    onClick={(e) => this.selectLocation(loc, e.target)}>
+                                    <h3 className="spaced">Origin: {loc.origin}</h3>
+                                    <h4 className="spaced smaller">Destination: {loc.destination}</h4>
+                                    <h4 className="spaced smaller">Departure Time: {loc.departureTime}</h4>
+                                    <ul className="bullets spaced">Stops: 
+                                        {loc.stops.map((stop, j) => {
+                                            return (<li 
+                                                        className="inline-block"
+                                                        key={j}>{stop.stop}</li>)
+                                        })}
+                                    </ul>
+                                </ListGroupItem>
+                            );
+                        })}
+                        <button 
+                            className="fixed-submit"
+                            onClick={() => this.submit()}>Submit</button>
+                    </ListGroup>
+                </div>
+            )
         } else if (this.state.mapped) {
             return <Map mapped={this.state.mapped}/>
         } else {

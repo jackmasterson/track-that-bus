@@ -18,16 +18,8 @@ app.use(bodyParser.urlencoded({
 app.use(express.static(DIST_DIR));
 
 console.log('app listening on port ', PORT);
-app.get('/', (req, res) => {
+app.get('*', (req, res) => {
     res.sendFile(path.join(DIST_DIR, 'index.html'));
-});
-
-app.get('/driver', (req, res) => {
-    res.sendFile(path.join(DIST_DIR, 'driver.html'));
-});
-
-app.get('/passenger', (req, res) => {
-    res.sendFile(path.join(DIST_DIR, 'passenger.html'));
 });
 
 app.post('/update', (req, res) => {

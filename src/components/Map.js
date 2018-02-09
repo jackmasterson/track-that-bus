@@ -24,6 +24,8 @@ export class Map extends Component {
                 let stopped = this.createMarker(google, stop.stop, stop.coords, 'Stop', map);
                 stopsData[incr] = stopped;
             });
+
+            originWindow.open(map, originMarker);
         });
     }
     createMarker(google, location, coords, type, map) {

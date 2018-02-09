@@ -32,17 +32,22 @@ export class Stops extends Component {
         if (this.state.tracks.length > 0) {
             return (
                 <div className="launch-div">
-                    <div> Click to remove all extra stops:
-                    {this.state.tracks.map((track, incr) => {
-                        track = JSON.parse(track);
-                            return (
-                                <Button key={incr} 
-                                     onClick={() => this.removeStop(track)}>
-                                     {track.stop}
-                                </Button>
-                            )
-                        })}
-                    </div>
+                    <ul className="small-ul"> 
+                        Click to <span className="highlight">remove</span> 
+                        all extra stops. If it all looks good click 'submit'.
+                        {this.state.tracks.map((track, incr) => {
+                            track = JSON.parse(track);
+                                return (
+                                    <li key={incr}>
+                                        <Button 
+                                            className="selection"
+                                            onClick={() => this.removeStop(track)}>
+                                            {track.stop}
+                                        </Button>
+                                    </li>
+                                )
+                            })}
+                    </ul>
                     <button onClick={() => this.props.handleStops(this.state.tracks)}>Submit</button>
                 </div>
             );

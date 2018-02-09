@@ -1,15 +1,12 @@
 import React, { Component } from 'react';
 import './App.css';
-// import {Launch} from './components/Launch';
-import {Init} from './components/Init';
+import {Launch} from './components/Launch';
 
 class App extends Component {
   render() {
     return (
-      <Init />
-      // <Launch />
+      <Launch/>
     );
   }
 }
-
 export default App;

@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+
 import {User} from './User';
 import {Admin} from './Admin';
-
-import {SelectionScreen} from './SelectionScreen';
+import {Init} from './Init';
 
 export class Launch extends Component {
     componentWillMount() {
+        console.log('this: ', this.props);
         this.setState({
             locations: [{
                 stop: 'Port Authority',
@@ -40,6 +42,18 @@ export class Launch extends Component {
                 time: '6:00am',
             }, {
                 time: '6:25am',
+            }, {
+                time: '2:00pm',
+            }, {
+                time: '2:30pm',
+            }, {
+                time: '3:00pm',
+            }, {
+                time: '3:30pm',
+            }, {
+                time: '4:20pm',
+            }, {
+                time: '4:40pm',
             }]
         });
     }
@@ -102,7 +116,6 @@ export class Launch extends Component {
             this.getLocation();
         }, 4500000);
         // end bug
-
         this.setState({
             sent: true,
         });
@@ -117,24 +130,38 @@ export class Launch extends Component {
         console.warn(`ERROR(${err.code}): ${err.message}`);
     };
     render() {
-        if (window.location.pathname === '/admin') {
-            if (this.state.sent) {
-                return (
-                    <div className="launch-div">Coordinates sent!</div>
-                )
-            } else {
-                return <Admin
-                    submitLocation={(loc, type) => this.submitLocation(loc, type)}
-                    submitStops={(stops) => this.submitStops(stops)}
-                    locations={this.state.locations}
-                    times={this.state.times}
-                    getLocation={() => this.getLocation()}
-                    handleStops={(stops) => this.handleStops(stops)}
-                />
-            }
-        } else {
-            return <User 
-                    options={this.state.locations}/>
-        }
+        return (
+            <Router>
+                <Switch>
+                    <Route exact path="/" component={() => {
+                        return (
+                            <Init />
+                        )
+                    }} />
+                    <Route path="/driver" render={() => {
+                        if (this.state.sent) {
+                             return <div>Coordinates sent!</div>
+                        } else {
+                            return (
+                                <Admin
+                                    submitLocation={(loc, type) => this.submitLocation(loc, type)}
+                                    submitStops={(stops) => this.submitStops(stops)}
+                                    locations={this.state.locations}
+                                    times={this.state.times}
+                                    getLocation={() => this.getLocation()}
+                                    handleStops={(stops) => this.handleStops(stops)}
+                                />
+                            )
+                        }
+                    }} />
+                    <Route path="/passenger" render={() => {
+                        return (
+                            <User
+                                options={this.state.locations} />
+                        )
+                    }} />
+                </Switch>
+            </Router>
+        );
     }
 }

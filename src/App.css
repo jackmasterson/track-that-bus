@@ -2,6 +2,7 @@ body {
     height: 100vh;
     width: 100vw;
     overflow-x: scroll;
+    font-size: 55px;
 }
 
 ul {
@@ -20,6 +21,11 @@ ul {
     width: 100vw;
 }
 
+.admin-launch {
+    width: 100vw;
+    text-align: center;
+}
+
 #map {
     width: 100vw;
     height: 100vh;
@@ -28,10 +34,6 @@ ul {
     margin: 15px;
 }
 
-.admin-launch {
-    width: 100vw;
-    text-align: center;
-}
 
 .view {
     display: block;
@@ -45,6 +47,7 @@ ul {
 
 .selection {
     margin: 25px;
+    font-size: 55px;
 }
 
 .colorful {
@@ -57,7 +60,7 @@ ul {
 }
 
 .spaced {
-    margin: 15px;
+    margin: 85px;
 }
 
 .fixed-submit {
@@ -69,4 +72,17 @@ ul {
 
 .smaller {
     font-size: 20px;
+}
+
+.highlight {
+    font-size: 25px;
+    color: red;
+    font-style: bold;
+}
+
+.small-ul {
+    margin-top: 125px;
+    height: 30vh;
+    overflow-x: scroll;
+    scrollbar-base-color: gray;
 }

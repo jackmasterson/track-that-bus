@@ -5,7 +5,7 @@
   "main": "server.js",
   "homepage": "http://jackmasterson.github.io/angular-to-react",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "node server.js",
     "webpack": "webpack --watch",
     "dev-server": "mongod --dbpath ./data/",
     "deploy": "gh-pages -d build",

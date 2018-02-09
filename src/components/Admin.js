@@ -9,6 +9,7 @@ export class Admin extends Component {
         this.display = {
             origin: <Location
                 type="origin"
+                className="admin-launch"
                 locations={this.props.locations}
                 nextScene={() => this.nextScene()}
                 submitLocation={(loc) => this.submitLocation(loc, 'origin')}
@@ -16,11 +17,13 @@ export class Admin extends Component {
             destination: <Location
                 locations={this.props.locations}
                 type="destination"
+                className="admin-launch"
                 nextScene={() => this.nextScene()}
                 submitLocation={(loc) => this.submitLocation(loc, 'destination')}
             />,
             departureTime: <DepartureTime
                 type="departureTime"
+                className="admin-launch"
                 times={this.props.times}
                 nextScene={() => this.nextScene()}
                 submitTime={(time) => this.submitLocation(time, 'departureTime')}
@@ -52,20 +55,21 @@ export class Admin extends Component {
         this.props.submitLocation(loc, type);
     }
     render() {
-        console.log(this.state);
         if (this.state.displayStops) {
             return (
-                <Stops
-                    stops={this.props.locations}
-                    origin={this.state.origin}
-                    destination={this.state.destination}
-                    handleStops={(stops) => this.props.handleStops(stops)}
-                />
+                <div className="admin-launch">
+                    <Stops
+                        stops={this.props.locations}
+                        origin={this.state.origin}
+                        destination={this.state.destination}
+                        handleStops={(stops) => this.props.handleStops(stops)}
+                    />
+                </div>
             )
         } else {
             return (
                 <div className="admin-launch">
-                    <h1>hello, {this.state.admin}</h1>
+                    hello, {this.state.admin}
                     {(() => { return (this.display[this.state.display]) })()}
                 </div>
             );
