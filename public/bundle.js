@@ -27978,7 +27978,7 @@ exports = module.exports = __webpack_require__(101)(false);
 
 
 // module
-exports.push([module.i, "body {\n    height: 100vh;\n    width: 100vw;\n    overflow-x: scroll;\n    font-size: 55px;\n}\n\nul {\n    margin: 15px 0 0 0;\n    padding: 0;\n}\n\n.launch-div {\n    width: 100vw;\n    height: 100vh;\n    text-align: center;\n    vertical-align: middle;\n}\n\n.launch-header {\n    width: 100vw;\n}\n\n.admin-launch {\n    width: 100vw;\n    text-align: center;\n}\n\n#map {\n    width: 100vw;\n    height: 100vh;\n}\n.stops {\n    margin: 15px;\n}\n\n\n.view {\n    display: block;\n}\n.hide {\n    display: none;\n}\n.border {\n    border: 1px solid black;\n}\n\n.selection {\n    margin: 25px;\n    font-size: 55px;\n}\n\n.colorful {\n    color: green;\n}\n\n.inline-block {\n    display: inline-block;\n    margin: 15px;\n}\n\n.spaced {\n    margin: 85px;\n}\n\n.fixed-submit {\n    position: fixed;\n    right: 100px;\n    bottom: 100px;\n    z-index: 1000000;\n}\n\n.fixed-submit-wrapper {\n    background-color: black;\n    width: 100vw;\n    color: white;\n    height: 15vh;\n    position: fixed;\n    bottom: 0;\n    z-index: 99999;\n}\n\n.smaller {\n    font-size: 20px;\n}\n\n.highlight {\n    font-size: 25px;\n    color: red;\n    font-style: bold;\n}\n\n.small-ul {\n    margin-top: 125px;\n    height: 30vh;\n    overflow-x: scroll;\n    scrollbar-base-color: gray;\n}\n", ""]);
+exports.push([module.i, "body {\n    height: 100vh;\n    width: 100vw;\n    overflow-x: scroll;\n    font-size: 55px;\n}\n\nul {\n    margin: 15px 0 0 0;\n    padding: 0;\n}\n\n.launch-div {\n    width: 100vw;\n    height: 100vh;\n    text-align: center;\n    vertical-align: middle;\n}\n\n.submit-all {\n    margin-top: 55px;\n}\n\n.launch-header {\n    width: 100vw;\n}\n\n.admin-launch {\n    width: 100vw;\n    text-align: center;\n}\n\n#map {\n    width: 100vw;\n    height: 100vh;\n}\n.stops {\n    margin: 15px;\n}\n\n\n.view {\n    display: block;\n}\n.hide {\n    display: none;\n}\n.border {\n    border: 1px solid black;\n}\n\n.selection {\n    margin: 25px;\n    font-size: 55px;\n}\n\n.colorful {\n    color: green;\n}\n\n.inline-block {\n    display: inline-block;\n    margin: 15px;\n}\n\n.spaced {\n    margin: 85px;\n}\n\n.fixed-submit {\n    position: fixed;\n    right: 100px;\n    bottom: 100px;\n    z-index: 1000000;\n}\n\n.fixed-submit-wrapper {\n    background-color: black;\n    width: 100vw;\n    color: white;\n    height: 15vh;\n    position: fixed;\n    bottom: 0;\n    z-index: 99999;\n}\n\n.smaller {\n    font-size: 20px;\n}\n\n.highlight {\n    font-size: 25px;\n    color: red;\n    font-style: bold;\n}\n\n.small-ul {\n    margin-top: 125px;\n    height: 30vh;\n    overflow-x: scroll;\n    scrollbar-base-color: gray;\n}\n", ""]);
 
 // exports
 
@@ -31952,7 +31952,7 @@ var User = exports.User = function (_Component) {
                     });
                     _this3.gmapi = opts[k].gmapi;
                     _this3.duration = opts[k].duration;
-                    _this3.distance = opts[k].dist;
+                    _this3.distance = opts[k].distance;
                     _this3.stopData = opts[k].stopData;
 
                     var details = {};
@@ -44324,7 +44324,9 @@ var Stops = exports.Stops = function (_Component) {
                     ),
                     _react2.default.createElement(
                         'button',
-                        { onClick: function onClick() {
+                        {
+                            className: 'submit-all',
+                            onClick: function onClick() {
                                 return _this3.props.handleStops(_this3.state.tracks);
                             } },
                         'Submit'

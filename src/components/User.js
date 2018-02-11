@@ -37,7 +37,7 @@ export class User extends Component {
             });
             this.gmapi = opts[k].gmapi;
             this.duration = opts[k].duration;
-            this.distance = opts[k].dist;
+            this.distance = opts[k].distance;
             this.stopData = opts[k].stopData;
 
             let details = {};

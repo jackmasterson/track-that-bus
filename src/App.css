@@ -17,6 +17,10 @@ ul {
     vertical-align: middle;
 }
 
+.submit-all {
+    margin-top: 55px;
+}
+
 .launch-header {
     width: 100vw;
 }

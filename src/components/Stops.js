@@ -48,7 +48,9 @@ export class Stops extends Component {
                                 )
                             })}
                     </ul>
-                    <button onClick={() => this.props.handleStops(this.state.tracks)}>Submit</button>
+                    <button 
+                        className="submit-all"
+                        onClick={() => this.props.handleStops(this.state.tracks)}>Submit</button>
                 </div>
             );
         } else {
