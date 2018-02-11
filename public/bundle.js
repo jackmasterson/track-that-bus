@@ -27978,7 +27978,7 @@ exports = module.exports = __webpack_require__(101)(false);
 
 
 // module
-exports.push([module.i, "body {\n    height: 100vh;\n    width: 100vw;\n    overflow-x: scroll;\n    font-size: 55px;\n}\n\nul {\n    margin: 15px 0 0 0;\n    padding: 0;\n}\n\n.launch-div {\n    width: 100vw;\n    height: 100vh;\n    text-align: center;\n    vertical-align: middle;\n}\n\n.submit-all {\n    margin-top: 55px;\n}\n\n.launch-header {\n    width: 100vw;\n}\n\n.admin-launch {\n    width: 100vw;\n    text-align: center;\n}\n\n#map {\n    width: 100vw;\n    height: 100vh;\n}\n.stops {\n    margin: 15px;\n}\n\n\n.view {\n    display: block;\n}\n.hide {\n    display: none;\n}\n.border {\n    border: 1px solid black;\n}\n\n.selection {\n    margin: 25px;\n    font-size: 55px;\n}\n\n.colorful {\n    color: green;\n}\n\n.inline-block {\n    display: inline-block;\n    margin: 15px;\n}\n\n.spaced {\n    margin: 85px;\n}\n\n.fixed-submit {\n    position: fixed;\n    right: 100px;\n    bottom: 100px;\n    z-index: 1000000;\n}\n\n.fixed-submit-wrapper {\n    background-color: black;\n    width: 100vw;\n    color: white;\n    height: 15vh;\n    position: fixed;\n    bottom: 0;\n    z-index: 99999;\n}\n\n.smaller {\n    font-size: 20px;\n}\n\n.highlight {\n    font-size: 25px;\n    color: red;\n    font-style: bold;\n}\n\n.small-ul {\n    margin-top: 125px;\n    height: 30vh;\n    overflow-x: scroll;\n    scrollbar-base-color: gray;\n}\n", ""]);
+exports.push([module.i, "body {\n    height: 100vh;\n    width: 100vw;\n    overflow-x: scroll;\n    font-size: 25px;\n}\n\nul {\n    margin: 15px 0 0 0;\n    padding: 0;\n}\n\n.launch-div {\n    width: 100vw;\n    height: 100vh;\n    text-align: center;\n    vertical-align: middle;\n}\n\n.submit-all {\n    margin-top: 25px;\n}\n\n.launch-header {\n    width: 100vw;\n}\n\n.admin-launch {\n    width: 100vw;\n    text-align: center;\n}\n\n#map {\n    width: 100vw;\n    height: 100vh;\n}\n.stops {\n    margin: 15px;\n}\n\n\n.view {\n    display: block;\n}\n.hide {\n    display: none;\n}\n.border {\n    border: 1px solid black;\n}\n\n.selection {\n    margin: 15px;\n    font-size: 25px;\n}\n\n.colorful {\n    color: green;\n}\n\n.inline-block {\n    display: inline-block;\n    margin: 15px;\n}\n\n.spaced {\n    margin: 25px;\n}\n\n.fixed-submit {\n    position: fixed;\n    z-index: 1000000;\n    text-align: center;\n}\n\n.fixed-submit-button {\n    bottom: 50px;\n    color: white;\n}\n\n.fixed-search {\n    bottom: 0px;\n}\n\n.fixed-submit-wrapper {\n    background-color: black;\n    width: 100vw;\n    color: white;\n    height: 15vh;\n    position: fixed;\n    bottom: 0;\n    z-index: 99999;\n}\n\n.smaller {\n    font-size: 20px;\n}\n\n.highlight {\n    font-size: 25px;\n    color: red;\n    font-style: bold;\n}\n\n.small-ul {\n    margin-top: 25px;\n    height: 30vh;\n    overflow-x: scroll;\n    scrollbar-base-color: gray;\n}\n", ""]);
 
 // exports
 
@@ -32082,6 +32082,12 @@ var User = exports.User = function (_Component) {
                                         return _this4.selectLocation(loc, e.target);
                                     } },
                                 _react2.default.createElement(
+                                    'h1',
+                                    null,
+                                    'Bus ',
+                                    incr + 1
+                                ),
+                                _react2.default.createElement(
                                     'h3',
                                     { className: 'spaced' },
                                     'Origin: ',
@@ -32118,7 +32124,7 @@ var User = exports.User = function (_Component) {
                         _react2.default.createElement(
                             'button',
                             {
-                                className: 'fixed-submit',
+                                className: 'fixed-submit fixed-submit-button',
                                 onClick: function onClick() {
                                     return _this4.submit();
                                 } },
@@ -43459,7 +43465,7 @@ var Map = exports.Map = function (_Component) {
             _googleMaps2.default.KEY = this.props.gmapi;
             _googleMaps2.default.load(function (google) {
                 var map = new google.maps.Map(el, {
-                    zoom: 10,
+                    zoom: 8,
                     center: _this2.props.mapped.originCoords
                 });
 
@@ -43906,7 +43912,7 @@ var Filter = exports.Filter = function (_Component) {
             return _react2.default.createElement(
                 "div",
                 { className: "fixed-submit-wrapper" },
-                _react2.default.createElement("input", { className: "fixed-submit", onChange: function onChange(e) {
+                _react2.default.createElement("input", { className: "fixed-submit fixed-search", onChange: function onChange(e) {
                         return _this4.handleChange(e.target.value);
                     },
                     placeholder: "search for stops" })

@@ -9,7 +9,7 @@ export class Map extends Component {
         GoogleMapsLoader.KEY = this.props.gmapi;
         GoogleMapsLoader.load((google) => {
             let map = new google.maps.Map(el, {
-                zoom: 10,
+                zoom: 8,
                 center: this.props.mapped.originCoords,
             });
             

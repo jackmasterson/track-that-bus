@@ -35,7 +35,7 @@ export class Filter extends Component {
     render() {
         return (
             <div className="fixed-submit-wrapper">
-                <input className="fixed-submit" onChange={(e) => this.handleChange(e.target.value)}
+                <input className="fixed-submit fixed-search" onChange={(e) => this.handleChange(e.target.value)}
                    placeholder="search for stops"/>
             </div>
         );

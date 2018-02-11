@@ -2,7 +2,7 @@ body {
     height: 100vh;
     width: 100vw;
     overflow-x: scroll;
-    font-size: 55px;
+    font-size: 25px;
 }
 
 ul {
@@ -18,7 +18,7 @@ ul {
 }
 
 .submit-all {
-    margin-top: 55px;
+    margin-top: 25px;
 }
 
 .launch-header {
@@ -50,8 +50,8 @@ ul {
 }
 
 .selection {
-    margin: 25px;
-    font-size: 55px;
+    margin: 15px;
+    font-size: 25px;
 }
 
 .colorful {
@@ -64,14 +64,22 @@ ul {
 }
 
 .spaced {
-    margin: 85px;
+    margin: 25px;
 }
 
 .fixed-submit {
     position: fixed;
-    right: 100px;
-    bottom: 100px;
     z-index: 1000000;
+    text-align: center;
+}
+
+.fixed-submit-button {
+    bottom: 50px;
+    color: white;
+}
+
+.fixed-search {
+    bottom: 0px;
 }
 
 .fixed-submit-wrapper {
@@ -95,7 +103,7 @@ ul {
 }
 
 .small-ul {
-    margin-top: 125px;
+    margin-top: 25px;
     height: 30vh;
     overflow-x: scroll;
     scrollbar-base-color: gray;

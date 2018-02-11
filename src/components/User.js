@@ -109,6 +109,7 @@ export class User extends Component {
                                     className="selection"
                                     key={incr}
                                     onClick={(e) => this.selectLocation(loc, e.target)}>
+                                    <h1>Bus {incr + 1}</h1>
                                     <h3 className="spaced">Origin: {loc.origin}</h3>
                                     <h4 className="spaced smaller">Destination: {loc.destination}</h4>
                                     <h4 className="spaced smaller">Departure Time: {loc.departureTime}</h4>
@@ -123,7 +124,7 @@ export class User extends Component {
                             );
                         })}
                         <button 
-                            className="fixed-submit"
+                            className="fixed-submit fixed-submit-button"
                             onClick={() => this.submit()}>Submit</button>
                     </ListGroup>
                 </div>
