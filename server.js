@@ -85,36 +85,36 @@ app.post('/update', (req, res) => {
     this.buids[buid].destination = req.body.destination;
     this.buids[buid].stopData = {};
     this.buids[buid].destinationData = {};
-    // distance.get(
-    //     {
-    //         origin: `${req.body.currentCoords.lat}, ${req.body.currentCoords.lng}`,
-    //         destination: `${req.body.destination.coords.lat}, ${req.body.destination.coords.lng}`,
-    //         units: 'imperial',
-    //         mode: 'driving',
-    //     }, (err, data) => {
-    //         if (err) return console.log(err);
-    //         let name = req.body.destination.stop;
-    //         this.buids[buid].distance = data.distance;
-    //         this.buids[buid].duration = data.duration;
-    //     });
-    // req.body.stops.map((stop) => {
-    //     stop = JSON.parse(stop);
+    distance.get(
+        {
+            origin: `${req.body.currentCoords.lat}, ${req.body.currentCoords.lng}`,
+            destination: `${req.body.destination.coords.lat}, ${req.body.destination.coords.lng}`,
+            units: 'imperial',
+            mode: 'driving',
+        }, (err, data) => {
+            if (err) return console.log(err);
+            let name = req.body.destination.stop;
+            this.buids[buid].distance = data.distance;
+            this.buids[buid].duration = data.duration;
+        });
+    req.body.stops.map((stop) => {
+        stop = JSON.parse(stop);
 
-    //     distance.get(
-    //         {
-    //             origin: `${req.body.currentCoords.lat}, ${req.body.currentCoords.lng}`,
-    //             destination: `${stop.coords.lat}, ${stop.coords.lng}`,
-    //             units: 'imperial',
-    //             mode: 'driving',
-    //         }, (err, data) => {
-    //             if (err) return console.log(err);
-    //             let name = stop.stop;
-    //             this.buids[buid].stopData[name] = {
-    //                 distance: data.distance,
-    //                 duration: data.duration
-    //             }
-    //         });
-    // })
+        distance.get(
+            {
+                origin: `${req.body.currentCoords.lat}, ${req.body.currentCoords.lng}`,
+                destination: `${stop.coords.lat}, ${stop.coords.lng}`,
+                units: 'imperial',
+                mode: 'driving',
+            }, (err, data) => {
+                if (err) return console.log(err);
+                let name = stop.stop;
+                this.buids[buid].stopData[name] = {
+                    distance: data.distance,
+                    duration: data.duration
+                }
+            });
+    })
 });
 
 
