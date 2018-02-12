@@ -44009,10 +44009,22 @@ var Admin = exports.Admin = function (_Component) {
             };
             this.displayKeys = Object.keys(this.display);
             var display = this.displayKeys[this.sceneTrack];
-            this.setState({
-                currentCoords: { lat: 'pending', lng: 'pending' },
-                admin: 'admin-one',
-                display: display
+            fetch('/driver-data', {
+                method: 'post',
+                body: {}
+            }).then(function (res) {
+                console.log('res: ', res);
+                return res.json();
+            }).then(function (res) {
+                console.log(res);
+                _this2.username = res.userName;
+                _this2.setState({
+                    currentCoords: { lat: 'pending', lng: 'pending' },
+                    admin: _this2.username,
+                    display: display
+                });
+            }).catch(function (err) {
+                console.log('error is: ', err);
             });
         }
     }, {
@@ -44039,6 +44051,13 @@ var Admin = exports.Admin = function (_Component) {
         value: function render() {
             var _this3 = this;
 
+            if (!this.state) {
+                return _react2.default.createElement(
+                    'div',
+                    null,
+                    'Loading...'
+                );
+            }
             if (this.state.displayStops) {
                 return _react2.default.createElement(
                     'div',

@@ -31,11 +31,26 @@ export class Admin extends Component {
         }
         this.displayKeys = Object.keys(this.display);
         let display = this.displayKeys[this.sceneTrack];
-        this.setState({
-            currentCoords: {lat: 'pending', lng: 'pending'},
-            admin: 'admin-one',
-            display
-        });
+        fetch('/driver-data', {
+            method: 'post',
+            body: {}
+        })
+        .then((res) => {
+            console.log('res: ', res);
+            return res.json();
+        })
+        .then((res) => {
+            console.log(res);
+            this.username = res.userName;
+            this.setState({
+                currentCoords: { lat: 'pending', lng: 'pending' },
+                admin: this.username,
+                display
+            });
+        })
+        .catch((err) => {
+            console.log('error is: ', err);
+        })
     }
     nextScene() {
         ++this.sceneTrack;
@@ -55,6 +70,11 @@ export class Admin extends Component {
         this.props.submitLocation(loc, type);
     }
     render() {
+        if (!this.state) {
+            return (
+                <div>Loading...</div>
+            );
+        }
         if (this.state.displayStops) {
             return (
                 <div className="admin-launch">
