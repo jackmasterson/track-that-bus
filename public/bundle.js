@@ -10496,7 +10496,7 @@ var _App = __webpack_require__(169);
 
 var _App2 = _interopRequireDefault(_App);
 
-var _registerServiceWorker = __webpack_require__(349);
+var _registerServiceWorker = __webpack_require__(350);
 
 var _registerServiceWorker2 = _interopRequireDefault(_registerServiceWorker);
 
@@ -27978,7 +27978,7 @@ exports = module.exports = __webpack_require__(101)(false);
 
 
 // module
-exports.push([module.i, "body {\n    height: 100vh;\n    width: 100vw;\n    overflow-x: scroll;\n    font-size: 25px;\n}\n\nul {\n    margin: 15px 0 0 0;\n    padding: 0;\n}\n\n.launch-div {\n    width: 100vw;\n    height: 100vh;\n    text-align: center;\n    vertical-align: middle;\n}\n\n.submit-all {\n    margin-top: 25px;\n}\n\n.launch-header {\n    width: 100vw;\n}\n\n.admin-launch {\n    width: 100vw;\n    text-align: center;\n}\n\n#map {\n    width: 100vw;\n    height: 100vh;\n}\n.stops {\n    margin: 15px;\n}\n\n\n.view {\n    display: block;\n}\n.hide {\n    display: none;\n}\n.border {\n    border: 1px solid black;\n}\n\n.selection {\n    margin: 15px;\n    font-size: 25px;\n}\n\n.colorful {\n    color: green;\n}\n\n.inline-block {\n    display: inline-block;\n    margin: 15px;\n}\n\n.spaced {\n    margin: 25px;\n}\n\n.fixed-submit {\n    position: fixed;\n    z-index: 1000000;\n    text-align: center;\n}\n\n.fixed-submit-button {\n    bottom: 50px;\n    color: white;\n}\n\n.fixed-search {\n    bottom: 0px;\n}\n\n.fixed-submit-wrapper {\n    background-color: black;\n    width: 100vw;\n    color: white;\n    height: 15vh;\n    position: fixed;\n    bottom: 0;\n    z-index: 99999;\n}\n\n.smaller {\n    font-size: 20px;\n}\n\n.highlight {\n    font-size: 25px;\n    color: red;\n    font-style: bold;\n}\n\n.small-ul {\n    margin-top: 25px;\n    height: 30vh;\n    overflow-x: scroll;\n    scrollbar-base-color: gray;\n}\n", ""]);
+exports.push([module.i, "body {\n    height: 100vh;\n    width: 100vw;\n    overflow-x: scroll;\n    font-size: 25px;\n}\n\nul {\n    margin: 15px 0 0 0;\n    padding: 0;\n}\n\n.launch-div {\n    width: 100vw;\n    height: 100vh;\n    text-align: center;\n    vertical-align: middle;\n}\n\n.submit-all {\n    margin-top: 25px;\n}\n\n.launch-header {\n    width: 100vw;\n}\n\n.admin-launch {\n    width: 100vw;\n    text-align: center;\n}\n\n#map {\n    width: 100vw;\n    height: 100vh;\n}\n.stops {\n    margin: 15px;\n}\n\n\n.view {\n    display: block;\n}\n.hide {\n    display: none;\n}\n.border {\n    border: 1px solid black;\n}\n\n.selection {\n    margin: 15px;\n    font-size: 25px;\n}\n\n.colorful {\n    color: green;\n}\n\n.inline-block {\n    display: inline-block;\n    margin: 15px;\n}\n\n.spaced {\n    margin: 25px;\n}\n\n.fixed-submit {\n    position: fixed;\n    z-index: 1000000;\n    text-align: center;\n}\n\n.fixed-submit-button {\n    bottom: 50px;\n    color: white;\n}\n\n.fixed-search {\n    bottom: 0px;\n}\n\n.fixed-submit-wrapper {\n    background-color: black;\n    width: 100vw;\n    color: white;\n    height: 15vh;\n    position: fixed;\n    bottom: 0;\n    z-index: 99999;\n}\n\n.smaller {\n    font-size: 20px;\n}\n\n.highlight {\n    font-size: 25px;\n    color: red;\n    font-style: bold;\n}\n\n.small-ul {\n    margin-top: 25px;\n    height: 30vh;\n    overflow-x: scroll;\n    scrollbar-base-color: gray;\n}\n\n.selected-stops {\n    cursor: pointer;\n}\n\n.above-map {\n    position: fixed;\n    top: 0;\n    right: 0;\n    z-index: 1000;\n    background: white;\n}\n", ""]);
 
 // exports
 
@@ -28007,11 +28007,11 @@ var _User = __webpack_require__(201);
 
 var _Admin = __webpack_require__(344);
 
-var _Init = __webpack_require__(348);
+var _Init = __webpack_require__(349);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -28031,7 +28031,7 @@ var Launch = exports.Launch = function (_Component) {
     _createClass(Launch, [{
         key: 'componentWillMount',
         value: function componentWillMount() {
-
+            this.scene = this.scene || 0;
             this.setState({
                 locations: [{
                     stop: 'Port Authority',
@@ -28058,39 +28058,16 @@ var Launch = exports.Launch = function (_Component) {
                     coords: { lat: 39.8741802, lng: -74.2168655 },
                     map: 5
                 }],
-                times: [{
-                    time: '5:10am'
-                }, {
-                    time: '5:45am'
-                }, {
-                    time: '6:00am'
-                }, {
-                    time: '6:25am'
-                }, {
-                    time: '2:00pm'
-                }, {
-                    time: '2:30pm'
-                }, {
-                    time: '3:00pm'
-                }, {
-                    time: '3:30pm'
-                }, {
-                    time: '4:20pm'
-                }, {
-                    time: '4:40pm'
-                }]
+                scene: this.scene,
+                plannedStops: [],
+                completed: false
             });
         }
     }, {
         key: 'submitLocation',
-        value: function submitLocation(loc, type) {
-            this.setState(_defineProperty({}, type, loc));
-        }
-    }, {
-        key: 'submitStops',
-        value: function submitStops(stops) {
+        value: function submitLocation(loc) {
             this.setState({
-                stops: stops
+                direction: loc
             });
         }
     }, {
@@ -28111,46 +28088,25 @@ var Launch = exports.Launch = function (_Component) {
     }, {
         key: 'success',
         value: function success(pos) {
-            var _this3 = this;
-
-            var buid = '';
-            var dest = this.state.destination.stop;
-            var origin = this.state.origin.stop;
-            var dep = this.state.departureTime;
-            this.state.locations.map(function (loc) {
-                loc.stop === origin ? buid += '&origin_' + loc.map : buid;
-                loc.stop === dest ? buid += '&dest_' + loc.map : buid;
-                loc.stop === origin ? buid += '&depTime_' + dep : buid;
+            console.log('pos: ', pos);
+            this.setState({
+                sent: true
             });
-
-            var currentCoords = {
-                lat: pos.coords.latitude,
-                lng: pos.coords.longitude
-            };
             fetch('/update', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    currentCoords: currentCoords,
-                    buid: buid,
-                    stops: this.state.stops,
-                    destination: this.state.destination
+                    direction: this.state.direction,
+                    stops: this.state.plannedStops,
+                    data: JSON.stringify(this.locations),
+                    current: { lat: pos.coords.latitude, lng: pos.coords.longitude }
                 })
             }).then(function (res) {
                 return res.json();
             }).catch(function (err) {
                 console.log('error is: ', err);
-            });
-
-            // bug
-            this.timeout = setTimeout(function () {
-                _this3.getLocation();
-            }, 4500000);
-            // end bug
-            this.setState({
-                sent: true
             });
         }
     }, {
@@ -28162,6 +28118,36 @@ var Launch = exports.Launch = function (_Component) {
             this.getLocation();
         }
     }, {
+        key: 'nextScene',
+        value: function nextScene() {
+            this.setState({
+                scene: ++this.scene
+            });
+        }
+    }, {
+        key: 'previousScene',
+        value: function previousScene() {
+            this.setState({
+                scene: --this.scene
+            });
+        }
+    }, {
+        key: 'addStops',
+        value: function addStops(stop) {
+            this.setState({
+                plannedStops: [].concat(_toConsumableArray(this.state.plannedStops), [stop])
+            });
+        }
+    }, {
+        key: 'removeStops',
+        value: function removeStops(stop) {
+            this.setState({
+                plannedStops: this.state.plannedStops.filter(function (plannedStop) {
+                    return plannedStop !== stop;
+                })
+            });
+        }
+    }, {
         key: 'error',
         value: function error(err) {
             console.warn('ERROR(' + err.code + '): ' + err.message);
@@ -28169,7 +28155,7 @@ var Launch = exports.Launch = function (_Component) {
     }, {
         key: 'render',
         value: function render() {
-            var _this4 = this;
+            var _this3 = this;
 
             return _react2.default.createElement(
                 _reactRouterDom.BrowserRouter,
@@ -28181,34 +28167,49 @@ var Launch = exports.Launch = function (_Component) {
                             return _react2.default.createElement(_Init.Init, null);
                         } }),
                     _react2.default.createElement(_reactRouterDom.Route, { path: '/driver', render: function render() {
-                            if (_this4.state.sent) {
+                            if (_this3.state.sent) {
                                 return _react2.default.createElement(
                                     'div',
                                     null,
-                                    'Coordinates sent!'
+                                    'Data sent!'
                                 );
                             } else {
                                 return _react2.default.createElement(_Admin.Admin, {
                                     submitLocation: function submitLocation(loc, type) {
-                                        return _this4.submitLocation(loc, type);
+                                        return _this3.submitLocation(loc, type);
                                     },
                                     submitStops: function submitStops(stops) {
-                                        return _this4.submitStops(stops);
+                                        return _this3.submitStops(stops);
                                     },
-                                    locations: _this4.state.locations,
-                                    times: _this4.state.times,
+                                    locations: _this3.state.locations,
+                                    times: _this3.state.times,
                                     getLocation: function getLocation() {
-                                        return _this4.getLocation();
+                                        return _this3.getLocation();
                                     },
-                                    handleStops: function handleStops(stops) {
-                                        return _this4.handleStops(stops);
+                                    nextScene: function nextScene() {
+                                        return _this3.nextScene();
+                                    },
+                                    previousScene: function previousScene() {
+                                        return _this3.previousScene();
+                                    },
+                                    scene: _this3.state.scene,
+                                    addStops: function addStops(stop) {
+                                        return _this3.addStops(stop);
+                                    },
+                                    removeStops: function removeStops(stop) {
+                                        return _this3.removeStops(stop);
+                                    },
+                                    plannedStops: _this3.state.plannedStops,
+                                    completed: _this3.state.completed,
+                                    method: function method() {
+                                        return _this3.getLocation();
                                     }
                                 });
                             }
                         } }),
                     _react2.default.createElement(_reactRouterDom.Route, { path: '/passenger', render: function render() {
                             return _react2.default.createElement(_User.User, {
-                                options: _this4.state.locations });
+                                options: _this3.state.locations });
                         } })
                 )
             );
@@ -31930,122 +31931,14 @@ var User = exports.User = function (_Component) {
     }, {
         key: 'buildOptions',
         value: function buildOptions(opts) {
-            var _this3 = this;
-
-            var keys = Object.keys(opts);
-            var locations = this.props.options;
-
-            this.locations = [];
-
-            var _iteratorNormalCompletion = true;
-            var _didIteratorError = false;
-            var _iteratorError = undefined;
-
-            try {
-                var _loop = function _loop() {
-                    var k = _step.value;
-
-                    var formattedStops = [];
-                    opts[k].stops.map(function (stop, incr) {
-                        stop = JSON.parse(stop);
-                        formattedStops.push(stop);
-                    });
-                    _this3.gmapi = opts[k].gmapi;
-                    _this3.duration = opts[k].duration;
-                    _this3.distance = opts[k].distance;
-                    _this3.stopData = opts[k].stopData;
-
-                    var details = {};
-                    k = k.split('&');
-
-                    var orig = void 0;
-                    var depTime = void 0;
-                    var destination = void 0;
-                    k.map(function (ke) {
-                        ke.indexOf('dest') > -1 ? destination = ke.split('dest_')[1] : destination;
-                        ke.indexOf('origin') > -1 ? orig = ke.split('origin_')[1] : orig;
-                        ke.indexOf('depTime') > -1 ? depTime = ke.split('depTime_')[1] : depTime;
-                    });
-
-                    locations.map(function (loc) {
-                        orig == loc.map ? details['origin'] = loc.stop : orig;
-                        orig == loc.map ? details['departureTime'] = depTime : orig;
-                        orig == loc.map ? details['buid'] = k : orig;
-                        orig == loc.map ? details['originCoords'] = loc.coords : orig;
-                        destination == loc.map ? details['destination'] = loc.stop : orig;
-                        destination == loc.map ? details['destinationCoords'] = loc.coords : orig;
-                        destination == loc.map ? details['stops'] = formattedStops : details;
-                    });
-                    _this3.locations.push(details);
-                };
-
-                for (var _iterator = keys[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                    _loop();
-                }
-            } catch (err) {
-                _didIteratorError = true;
-                _iteratorError = err;
-            } finally {
-                try {
-                    if (!_iteratorNormalCompletion && _iterator.return) {
-                        _iterator.return();
-                    }
-                } finally {
-                    if (_didIteratorError) {
-                        throw _iteratorError;
-                    }
-                }
-            }
-
             this.setState({
-                locations: this.locations,
-                stops: opts.stops,
-                gmapi: this.gmapi,
-                distance: this.distance,
-                duration: this.duration,
-                stopData: this.stopData
-            });
-        }
-    }, {
-        key: 'selectLocation',
-        value: function selectLocation(loc, el) {
-
-            var divs = document.querySelectorAll('.selection');
-            var _iteratorNormalCompletion2 = true;
-            var _didIteratorError2 = false;
-            var _iteratorError2 = undefined;
-
-            try {
-                for (var _iterator2 = divs[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-                    var div = _step2.value;
-
-                    div.style.border = '';
-                }
-            } catch (err) {
-                _didIteratorError2 = true;
-                _iteratorError2 = err;
-            } finally {
-                try {
-                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
-                        _iterator2.return();
-                    }
-                } finally {
-                    if (_didIteratorError2) {
-                        throw _iteratorError2;
-                    }
-                }
-            }
-
-            el.style.border = '1px solid black';
-            this.setState({
-                selected: loc
+                opts: opts
             });
         }
     }, {
         key: 'submit',
         value: function submit() {
             this.setState({
-                mapped: this.state.selected,
                 gmapi: this.state.gmapi
             });
         }
@@ -32059,7 +31952,7 @@ var User = exports.User = function (_Component) {
     }, {
         key: 'render',
         value: function render() {
-            var _this4 = this;
+            var _this3 = this;
 
             if (this.state.locations && !this.state.mapped) {
                 return _react2.default.createElement(
@@ -32067,7 +31960,7 @@ var User = exports.User = function (_Component) {
                     null,
                     _react2.default.createElement(_Filter.Filter, { locations: this.state.locations,
                         filtered: function filtered(locs) {
-                            return _this4.filtered(locs);
+                            return _this3.filtered(locs);
                         } }),
                     _react2.default.createElement(
                         _reactBootstrap.ListGroup,
@@ -32077,48 +31970,8 @@ var User = exports.User = function (_Component) {
                                 _reactBootstrap.ListGroupItem,
                                 { bsSize: 'large',
                                     className: 'selection',
-                                    key: incr,
-                                    onClick: function onClick(e) {
-                                        return _this4.selectLocation(loc, e.target);
-                                    } },
-                                _react2.default.createElement(
-                                    'h1',
-                                    null,
-                                    'Bus ',
-                                    incr + 1
-                                ),
-                                _react2.default.createElement(
-                                    'h3',
-                                    { className: 'spaced' },
-                                    'Origin: ',
-                                    loc.origin
-                                ),
-                                _react2.default.createElement(
-                                    'h4',
-                                    { className: 'spaced smaller' },
-                                    'Destination: ',
-                                    loc.destination
-                                ),
-                                _react2.default.createElement(
-                                    'h4',
-                                    { className: 'spaced smaller' },
-                                    'Departure Time: ',
-                                    loc.departureTime
-                                ),
-                                _react2.default.createElement(
-                                    'ul',
-                                    { className: 'bullets spaced' },
-                                    'Stops:',
-                                    loc.stops.map(function (stop, j) {
-                                        return _react2.default.createElement(
-                                            'li',
-                                            {
-                                                className: 'inline-block',
-                                                key: j },
-                                            stop.stop
-                                        );
-                                    })
-                                )
+                                    key: incr },
+                                incr
                             );
                         }),
                         _react2.default.createElement(
@@ -32126,24 +31979,22 @@ var User = exports.User = function (_Component) {
                             {
                                 className: 'fixed-submit fixed-submit-button',
                                 onClick: function onClick() {
-                                    return _this4.submit();
+                                    return _this3.submit();
                                 } },
                             'Submit'
                         )
                     )
                 );
-            } else if (this.state.mapped) {
-                return _react2.default.createElement(_Map.Map, { gmapi: this.state.gmapi,
-                    mapped: this.state.mapped,
-                    distance: this.state.distance,
-                    duration: this.state.duration,
-                    stopData: this.state.stopData });
-            } else {
+            } else if (!this.state.opts) {
                 return _react2.default.createElement(
                     'div',
                     null,
-                    'Something went wrong'
+                    'Loading...'
                 );
+            } else {
+                return _react2.default.createElement(_Map.Map, { gmapi: this.state.gmapi,
+                    destinations: this.state.opts
+                });
             }
         }
     }]);
@@ -43459,67 +43310,38 @@ var Map = exports.Map = function (_Component) {
         value: function componentWillMount() {
             var _this2 = this;
 
-            console.log('map props: ', this.props);
-            this.infowindows = this.infowindows || [];
+            this.data = this.props.destinations;
+            this.buids = {};
+
             var el = document.getElementById('map');
+
             _googleMaps2.default.KEY = this.props.gmapi;
             _googleMaps2.default.load(function (google) {
+
                 var map = new google.maps.Map(el, {
                     zoom: 8,
-                    center: _this2.props.mapped.originCoords
+                    center: { lat: 40.3499661, lng: -74.0877706 }
                 });
 
-                var destinationData = _this2.createMarker(google, _this2.props.mapped.destination, _this2.props.mapped.destinationCoords, 'Destination', map, _this2.props.distance, _this2.props.duration);
-                var destinationMarker = destinationData.marker;
-                var destinationWindow = destinationData.infowindow;
+                _this2.google = google;
+                _this2.map = map;
 
-                var originData = _this2.createMarker(google, _this2.props.mapped.origin, _this2.props.mapped.originCoords, 'Origin', map);
-                var originMarker = originData.marker;
-                var originWindow = originData.infowindow;
-                var stopsData = {};
-                console.log('props data: ', _this2.props.stopData);
-                _this2.props.mapped.stops.map(function (stop, incr) {
-                    console.log('stop here: ', stop);
-                    stop.duration = _this2.props.stopData[stop.stop].duration;
-                    stop.distance = _this2.props.stopData[stop.stop].distance;
-                    var stopped = _this2.createMarker(google, stop.stop, stop.coords, 'Stop', map, stop.distance, stop.duration);
-                    stopsData[incr] = stopped;
-                });
-
-                originWindow.open(map, originMarker);
-            });
-        }
-    }, {
-        key: 'createMarker',
-        value: function createMarker(google, location, coords, type, map, distance, duration) {
-            var _this3 = this;
-
-            var marker = new google.maps.Marker({
-                position: coords,
-                map: map
-            });
-            var content = void 0;
-            if (distance && duration) {
-                content = '<h4>' + type + ': ' + location + '</h4>\n                       <h4>Distance: ' + distance + '</h4>\n                       <h4>Duration: ' + duration + '</h4>';
-            } else {
-                content = '<h4>' + type + ': ' + location + '</h4>';
-            }
-            var infowindow = new google.maps.InfoWindow({
-                content: content
-            });
-
-            this.infowindows.push(infowindow);
-
-            marker.addListener('click', function () {
                 var _iteratorNormalCompletion = true;
                 var _didIteratorError = false;
                 var _iteratorError = undefined;
 
                 try {
-                    for (var _iterator = _this3.infowindows[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                        var info = _step.value;
+                    var _loop = function _loop() {
+                        var data = _step.value;
 
-                        info.close();
+                        var keys = Object.keys(data);
+                        keys.map(function (k) {
+                            _this2.createMarker(data[k], k);
+                        });
+                    };
+
+                    for (var _iterator = _this2.data[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                        _loop();
                     }
                 } catch (err) {
                     _didIteratorError = true;
@@ -43535,19 +43357,216 @@ var Map = exports.Map = function (_Component) {
                         }
                     }
                 }
+            });
+        }
+    }, {
+        key: 'createMarker',
+        value: function createMarker(data, buid) {
+            var _this3 = this;
 
-                infowindow.open(map, marker);
+            this.buids[buid] = {};
+            this.buids[buid].markers = this.buids[buid].markers || [];
+            this.buids[buid].data = data;
+            this.buids[buid].data.current = { lat: 40.3499661, lng: -74.0877706 };
+
+            var current = new google.maps.Marker({
+                position: data.current,
+                map: this.map,
+                buid: buid,
+                current: true,
+                icon: {
+                    url: '../img/center.png',
+                    size: new google.maps.Size(20, 20)
+                },
+                infowindow: new this.google.maps.InfoWindow({
+                    content: '<h4>' + data.direction + '</h4>'
+                })
             });
 
-            return {
-                marker: marker,
-                infowindow: infowindow
-            };
+            this.buids[buid].markers.push(current);
+
+            var keys = Object.keys(data);
+            keys.map(function (k, incr) {
+                k === 'stops' ? _this3.createStops(data[k], buid) : k;
+            });
+
+            current.addListener('click', function () {
+                var _iteratorNormalCompletion2 = true;
+                var _didIteratorError2 = false;
+                var _iteratorError2 = undefined;
+
+                try {
+                    for (var _iterator2 = _this3.buids[buid].markers[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                        var info = _step2.value;
+
+                        info.infowindow.close();
+                    }
+                } catch (err) {
+                    _didIteratorError2 = true;
+                    _iteratorError2 = err;
+                } finally {
+                    try {
+                        if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                            _iterator2.return();
+                        }
+                    } finally {
+                        if (_didIteratorError2) {
+                            throw _iteratorError2;
+                        }
+                    }
+                }
+
+                current.infowindow.open(_this3.map, current);
+                _this3.hideAll(buid);
+                _this3.changeVisibility(buid);
+            });
+
+            this.setDirection(buid);
+        }
+    }, {
+        key: 'hideAll',
+        value: function hideAll(buid) {
+            var keys = Object.keys(this.buids);
+            var _iteratorNormalCompletion3 = true;
+            var _didIteratorError3 = false;
+            var _iteratorError3 = undefined;
+
+            try {
+                for (var _iterator3 = keys[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+                    var k = _step3.value;
+
+                    this.buids[k].markers.map(function (marker) {
+                        marker.current ? marker : marker.setVisible(false);
+                    });
+                }
+            } catch (err) {
+                _didIteratorError3 = true;
+                _iteratorError3 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion3 && _iterator3.return) {
+                        _iterator3.return();
+                    }
+                } finally {
+                    if (_didIteratorError3) {
+                        throw _iteratorError3;
+                    }
+                }
+            }
+        }
+    }, {
+        key: 'changeVisibility',
+        value: function changeVisibility(buid) {
+            var markers = this.buids[buid].markers;
+            markers.map(function (marker) {
+                marker.remaining ? marker.setVisible(true) : marker;
+            });
+        }
+    }, {
+        key: 'createStops',
+        value: function createStops(stops, buid) {
+            var _this4 = this;
+
+            var keys = Object.keys(stops);
+            keys.map(function (k) {
+                var marker = new google.maps.Marker({
+                    position: stops[k].stop,
+                    map: _this4.map,
+                    stopName: stops[k].location,
+                    infowindow: new _this4.google.maps.InfoWindow({
+                        content: '<h4>' + stops[k].location + '</h4>'
+                    }),
+                    buid: buid
+                });
+
+                _this4.buids[buid].markers = _this4.buids[buid].markers || [];
+                _this4.buids[buid].markers.push(marker);
+
+                marker.addListener('click', function () {
+                    var _iteratorNormalCompletion4 = true;
+                    var _didIteratorError4 = false;
+                    var _iteratorError4 = undefined;
+
+                    try {
+                        for (var _iterator4 = _this4.buids[buid].markers[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+                            var info = _step4.value;
+
+                            info.infowindow.close();
+                        }
+                    } catch (err) {
+                        _didIteratorError4 = true;
+                        _iteratorError4 = err;
+                    } finally {
+                        try {
+                            if (!_iteratorNormalCompletion4 && _iterator4.return) {
+                                _iterator4.return();
+                            }
+                        } finally {
+                            if (_didIteratorError4) {
+                                throw _iteratorError4;
+                            }
+                        }
+                    }
+
+                    marker.infowindow.open(_this4.map, marker);
+                });
+            });
+        }
+    }, {
+        key: 'setDirection',
+        value: function setDirection(buid) {
+            var bus = this.buids[buid];
+            if (bus.data.south) {
+                bus.direction = function (x, y) {
+                    return x - y;
+                };
+            } else {
+                bus.direction = function (x, y) {
+                    return x + y;
+                };
+            }
+            this.setBreakPoints(bus, buid);
+        }
+    }, {
+        key: 'setBreakPoints',
+        value: function setBreakPoints(bus, buid) {
+            var currentLat = bus.data.current.lat;
+            var remaining = {};
+            var remainingMarkers = [];
+            bus.data.stops.map(function (stop) {
+                var stopLat = stop.stop.lat;
+                if (bus.direction(stopLat, currentLat) < 0) {
+                    remaining[stopLat] = stop.stop;
+                }
+            });
+            this.buids[buid].markers.map(function (marker) {
+                var markerLat = marker.position.lat();
+                if (remaining[markerLat]) {
+                    marker.remaining = true;
+                    remainingMarkers.push(marker);
+                } else if (!marker.current) {
+                    marker.setVisible(false);
+                }
+            });
+            this.buids[buid].markers = remainingMarkers;
+            this.buids[buid].nextStop = this.buids[buid].markers[0];
+            console.log(this.buids[buid].nextStop.stopName);
+            this.appendNextStop(this.buids[buid].nextStop.stopName);
+        }
+    }, {
+        key: 'appendNextStop',
+        value: function appendNextStop(stop) {
+            var el = document.querySelector('.above-map');
+            el.innerHTML = '<h3>Next Stop: ' + stop + '</h3>\n                        <h4>Distance: distance</h4>\n                        <h4>Duration: duration</h4>';
         }
     }, {
         key: 'render',
         value: function render() {
-            return _react2.default.createElement('div', null);
+            return _react2.default.createElement(
+                'div',
+                { className: 'above-map' },
+                'Hey'
+            );
         }
     }]);
 
@@ -43945,11 +43964,11 @@ var _Location = __webpack_require__(345);
 
 var _Stops = __webpack_require__(346);
 
-var _DepartureTime = __webpack_require__(347);
+var _Sending = __webpack_require__(347);
+
+var _SceneNavigator = __webpack_require__(348);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -43971,117 +43990,76 @@ var Admin = exports.Admin = function (_Component) {
         value: function componentWillMount() {
             var _this2 = this;
 
-            this.sceneTrack = 0;
-            this.display = {
-                origin: _react2.default.createElement(_Location.Location, {
-                    type: 'origin',
-                    className: 'admin-launch',
-                    locations: this.props.locations,
-                    nextScene: function nextScene() {
-                        return _this2.nextScene();
-                    },
+            this.locations = [{
+                direction: 'Northbound',
+                stops: ['Forked River', 'Monmouth', 'Red Bank', 'PNC', 'Cheesequake']
+            }, {
+                direction: 'Southbound',
+                stops: ['Cheesequake', 'PNC', 'Red Bank', 'Monmouth', 'Forked River']
+            }];
+            this.display = [{
+                component: _react2.default.createElement(_Location.Location, {
+                    locations: this.locations,
                     submitLocation: function submitLocation(loc) {
-                        return _this2.submitLocation(loc, 'origin');
-                    }
-                }),
-                destination: _react2.default.createElement(_Location.Location, {
-                    locations: this.props.locations,
-                    type: 'destination',
-                    className: 'admin-launch',
-                    nextScene: function nextScene() {
-                        return _this2.nextScene();
+                        return _this2.props.submitLocation(loc);
                     },
-                    submitLocation: function submitLocation(loc) {
-                        return _this2.submitLocation(loc, 'destination');
-                    }
-                }),
-                departureTime: _react2.default.createElement(_DepartureTime.DepartureTime, {
-                    type: 'departureTime',
-                    className: 'admin-launch',
-                    times: this.props.times,
                     nextScene: function nextScene() {
-                        return _this2.nextScene();
+                        return _this2.props.nextScene();
                     },
-                    submitTime: function submitTime(time) {
-                        return _this2.submitLocation(time, 'departureTime');
+                    previousScene: function previousScene() {
+                        return _this2.props.previousScene();
+                    },
+                    scene: this.props.scene
+                })
+            }, {
+                component: _react2.default.createElement(_Stops.Stops, {
+                    locations: this.locations,
+                    addStops: function addStops(stop) {
+                        return _this2.props.addStops(stop);
+                    },
+                    removeStops: function removeStops(stop) {
+                        return _this2.props.removeStops(stop);
+                    },
+                    plannedStops: function plannedStops() {
+                        return _this2.getStops();
+                    } })
+            }, {
+                component: _react2.default.createElement(_Sending.Sending, {
+                    method: function method() {
+                        return _this2.props.method();
                     }
                 })
-            };
-            this.displayKeys = Object.keys(this.display);
-            var display = this.displayKeys[this.sceneTrack];
-            fetch('/driver-data', {
-                method: 'post',
-                body: {}
-            }).then(function (res) {
-                console.log('res: ', res);
-                return res.json();
-            }).then(function (res) {
-                console.log(res);
-                _this2.username = res.userName;
-                _this2.setState({
-                    currentCoords: { lat: 'pending', lng: 'pending' },
-                    admin: _this2.username,
-                    display: display
-                });
-            }).catch(function (err) {
-                console.log('error is: ', err);
-            });
+            }];
         }
     }, {
-        key: 'nextScene',
-        value: function nextScene() {
-            ++this.sceneTrack;
-            this.setState({
-                display: this.displayKeys[this.sceneTrack]
-            });
-            if (this.sceneTrack === this.displayKeys.length) {
-                this.setState({
-                    displayStops: true
-                });
-            }
-        }
-    }, {
-        key: 'submitLocation',
-        value: function submitLocation(loc, type) {
-            this.setState(_defineProperty({}, type, loc));
-            this.props.submitLocation(loc, type);
+        key: 'getStops',
+        value: function getStops() {
+            return this.props.plannedStops;
         }
     }, {
         key: 'render',
         value: function render() {
             var _this3 = this;
 
-            if (!this.state) {
-                return _react2.default.createElement(
+            return _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement(
                     'div',
                     null,
-                    'Loading...'
-                );
-            }
-            if (this.state.displayStops) {
-                return _react2.default.createElement(
-                    'div',
-                    { className: 'admin-launch' },
-                    _react2.default.createElement(_Stops.Stops, {
-                        stops: this.props.locations,
-                        origin: this.state.origin,
-                        destination: this.state.destination,
-                        handleStops: function handleStops(stops) {
-                            return _this3.props.handleStops(stops);
-                        }
-                    })
-                );
-            } else {
-                return _react2.default.createElement(
-                    'div',
-                    { className: 'admin-launch' },
-                    'hello, ',
-                    this.state.admin,
-                    function () {
-                        return _this3.display[_this3.state.display];
-                    }()
-                );
-            }
+                    this.display[this.props.scene].component
+                ),
+                _react2.default.createElement(_SceneNavigator.SceneNavigator, {
+                    nextScene: function nextScene() {
+                        return _this3.props.nextScene();
+                    },
+                    previousScene: function previousScene() {
+                        return _this3.props.previousScene();
+                    },
+                    scene: this.props.scene,
+                    last: this.display.length - 1
+                })
+            );
         }
     }]);
 
@@ -44126,71 +44104,6 @@ var Location = exports.Location = function (_Component) {
     }
 
     _createClass(Location, [{
-        key: 'selectLocation',
-        value: function selectLocation(loc, div) {
-            this.divs = document.querySelectorAll('.selection');
-            var _iteratorNormalCompletion = true;
-            var _didIteratorError = false;
-            var _iteratorError = undefined;
-
-            try {
-                for (var _iterator = this.divs[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                    var d = _step.value;
-
-                    d.style.border = '';
-                }
-            } catch (err) {
-                _didIteratorError = true;
-                _iteratorError = err;
-            } finally {
-                try {
-                    if (!_iteratorNormalCompletion && _iterator.return) {
-                        _iterator.return();
-                    }
-                } finally {
-                    if (_didIteratorError) {
-                        throw _iteratorError;
-                    }
-                }
-            }
-
-            div.style.border = '1px solid black';
-            this.setState({
-                location: loc
-            });
-        }
-    }, {
-        key: 'submitLocation',
-        value: function submitLocation(loc) {
-            var _iteratorNormalCompletion2 = true;
-            var _didIteratorError2 = false;
-            var _iteratorError2 = undefined;
-
-            try {
-                for (var _iterator2 = this.divs[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-                    var d = _step2.value;
-
-                    d.style.border = '';
-                }
-            } catch (err) {
-                _didIteratorError2 = true;
-                _iteratorError2 = err;
-            } finally {
-                try {
-                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
-                        _iterator2.return();
-                    }
-                } finally {
-                    if (_didIteratorError2) {
-                        throw _iteratorError2;
-                    }
-                }
-            }
-
-            this.props.submitLocation(loc);
-            this.props.nextScene();
-        }
-    }, {
         key: 'render',
         value: function render() {
             var _this2 = this;
@@ -44198,41 +44111,17 @@ var Location = exports.Location = function (_Component) {
             return _react2.default.createElement(
                 'div',
                 null,
-                'What is your ',
-                _react2.default.createElement(
-                    'span',
-                    {
-                        className: 'colorful' },
-                    this.props.type
-                ),
-                '? Scroll for more',
-                _react2.default.createElement(
-                    'ul',
-                    { className: 'small-ul' },
-                    this.props.locations.map(function (loc, ukey) {
-                        return _react2.default.createElement(
-                            'li',
-                            { key: ukey },
-                            _react2.default.createElement(
-                                _reactBootstrap.Button,
-                                {
-                                    className: 'selection',
-                                    onClick: function onClick(e) {
-                                        return _this2.selectLocation(loc, e.target);
-                                    } },
-                                loc.stop
-                            )
-                        );
-                    })
-                ),
-                _react2.default.createElement('br', null),
-                _react2.default.createElement(
-                    'button',
-                    { onClick: function onClick() {
-                            return _this2.submitLocation(_this2.state.location);
-                        } },
-                    'Submit'
-                )
+                this.props.locations.map(function (location, incr) {
+                    return _react2.default.createElement(
+                        _reactBootstrap.Button,
+                        {
+                            key: incr,
+                            onClick: function onClick() {
+                                return _this2.props.submitLocation(location.direction);
+                            } },
+                        location.direction
+                    );
+                })
             );
         }
     }]);
@@ -44278,98 +44167,55 @@ var Stops = exports.Stops = function (_Component) {
     }
 
     _createClass(Stops, [{
-        key: 'componentWillMount',
-        value: function componentWillMount() {
-            this.origin = this.props.origin;
-            this.destination = this.props.destination;
-            this.stops = this.props.stops;
-
-            this.getStops();
-        }
-    }, {
-        key: 'getStops',
-        value: function getStops() {
-            var _this2 = this;
-
-            this.tracks = [];
-            this.stops.map(function (stop) {
-                stop.map > _this2.origin.map && stop.map < _this2.destination.map || stop.map < _this2.origin.map && stop.map > _this2.destination.map ? _this2.tracks.push(JSON.stringify(stop)) : stop;
-            });
-
-            this.setState({
-                tracks: this.tracks
-            });
-        }
-    }, {
-        key: 'removeStop',
-        value: function removeStop(track) {
-            this.tracks = this.tracks.filter(function (tr) {
-                return tr !== JSON.stringify(track);
-            });
-
-            this.setState({
-                tracks: this.tracks
-            });
-        }
-    }, {
         key: 'render',
         value: function render() {
-            var _this3 = this;
+            var _this2 = this;
 
-            if (this.state.tracks.length > 0) {
-                return _react2.default.createElement(
-                    'div',
-                    { className: 'launch-div' },
+            return _react2.default.createElement(
+                'div',
+                null,
+                this.props.locations.map(function (location, incr) {
                     _react2.default.createElement(
-                        'ul',
-                        { className: 'small-ul' },
-                        'Click to ',
+                        'p',
+                        null,
+                        'Select All Planned Stops'
+                    );
+                    return _react2.default.createElement(
+                        'div',
+                        { key: incr },
                         _react2.default.createElement(
-                            'span',
-                            { className: 'highlight' },
-                            'remove'
+                            'p',
+                            null,
+                            location.direction,
+                            ':'
                         ),
-                        'all extra stops. If it all looks good click \'submit\'.',
-                        this.state.tracks.map(function (track, incr) {
-                            track = JSON.parse(track);
+                        location.stops.map(function (stop, k) {
                             return _react2.default.createElement(
-                                'li',
-                                { key: incr },
-                                _react2.default.createElement(
-                                    _reactBootstrap.Button,
-                                    {
-                                        className: 'selection',
-                                        onClick: function onClick() {
-                                            return _this3.removeStop(track);
-                                        } },
-                                    track.stop
-                                )
+                                _reactBootstrap.Button,
+                                {
+                                    onClick: function onClick() {
+                                        return _this2.props.addStops(stop);
+                                    },
+                                    key: k },
+                                stop
                             );
                         })
-                    ),
-                    _react2.default.createElement(
-                        'button',
+                    );
+                }),
+                this.props.plannedStops().map(function (stop, incr) {
+                    return _react2.default.createElement(
+                        'div',
                         {
-                            className: 'submit-all',
+                            className: 'selected-stops',
                             onClick: function onClick() {
-                                return _this3.props.handleStops(_this3.state.tracks);
-                            } },
-                        'Submit'
-                    )
-                );
-            } else {
-                return _react2.default.createElement(
-                    'div',
-                    { className: 'launch-div' },
-                    _react2.default.createElement(
-                        'button',
-                        { onClick: function onClick() {
-                                return _this3.props.handleStops(_this3.state.tracks);
-                            } },
-                        'Submit'
-                    )
-                );
-            }
+                                return _this2.props.removeStops(stop);
+                            },
+                            key: incr },
+                        stop,
+                        '[x]'
+                    );
+                })
+            );
         }
     }]);
 
@@ -44386,7 +44232,61 @@ var Stops = exports.Stops = function (_Component) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.DepartureTime = undefined;
+exports.Sending = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Sending = exports.Sending = function (_Component) {
+    _inherits(Sending, _Component);
+
+    function Sending() {
+        _classCallCheck(this, Sending);
+
+        return _possibleConstructorReturn(this, (Sending.__proto__ || Object.getPrototypeOf(Sending)).apply(this, arguments));
+    }
+
+    _createClass(Sending, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            this.props.method();
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                'div',
+                null,
+                'Sending...'
+            );
+        }
+    }]);
+
+    return Sending;
+}(_react.Component);
+
+/***/ }),
+/* 348 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.SceneNavigator = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -44404,104 +44304,73 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var DepartureTime = exports.DepartureTime = function (_Component) {
-    _inherits(DepartureTime, _Component);
+var SceneNavigator = exports.SceneNavigator = function (_Component) {
+    _inherits(SceneNavigator, _Component);
 
-    function DepartureTime() {
-        _classCallCheck(this, DepartureTime);
+    function SceneNavigator() {
+        _classCallCheck(this, SceneNavigator);
 
-        return _possibleConstructorReturn(this, (DepartureTime.__proto__ || Object.getPrototypeOf(DepartureTime)).apply(this, arguments));
+        return _possibleConstructorReturn(this, (SceneNavigator.__proto__ || Object.getPrototypeOf(SceneNavigator)).apply(this, arguments));
     }
 
-    _createClass(DepartureTime, [{
+    _createClass(SceneNavigator, [{
         key: 'render',
         value: function render() {
             var _this2 = this;
 
-            return _react2.default.createElement(
-                'div',
-                null,
-                'What is your departure time?',
-                _react2.default.createElement(
-                    'ul',
-                    { className: 'small-ul' },
-                    this.props.times.map(function (time, incr) {
-                        return _react2.default.createElement(
-                            'li',
-                            { key: incr },
-                            _react2.default.createElement(
-                                _reactBootstrap.Button,
-                                {
-                                    bsStyle: 'default',
-                                    className: 'times selection' },
-                                _react2.default.createElement(
-                                    'div',
-                                    { onClick: function onClick(e) {
-                                            return _this2.selectTime(time, e.target);
-                                        }
-                                    },
-                                    time.time
-                                )
-                            )
-                        );
-                    })
-                ),
-                _react2.default.createElement(
-                    'button',
-                    { onClick: function onClick() {
-                            return _this2.submitTime(_this2.state.time);
-                        } },
-                    'Submit'
-                )
-            );
-        }
-    }, {
-        key: 'selectTime',
-        value: function selectTime(time, el) {
-            this.divs = document.querySelectorAll('.selection');
-            var _iteratorNormalCompletion = true;
-            var _didIteratorError = false;
-            var _iteratorError = undefined;
-
-            try {
-                for (var _iterator = this.divs[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                    var d = _step.value;
-
-                    d.style.border = '';
-                }
-            } catch (err) {
-                _didIteratorError = true;
-                _iteratorError = err;
-            } finally {
-                try {
-                    if (!_iteratorNormalCompletion && _iterator.return) {
-                        _iterator.return();
-                    }
-                } finally {
-                    if (_didIteratorError) {
-                        throw _iteratorError;
-                    }
-                }
+            if (this.props.scene === this.props.last) {
+                return _react2.default.createElement(
+                    'div',
+                    null,
+                    _react2.default.createElement(
+                        _reactBootstrap.Button,
+                        { onClick: function onClick() {
+                                return _this2.props.previousScene();
+                            } },
+                        'Back'
+                    )
+                );
             }
-
-            el.style.border = '1px solid black';
-            this.setState({
-                selectedTime: time.time
-            });
-        }
-    }, {
-        key: 'submitTime',
-        value: function submitTime() {
-            this.props.submitTime(this.state.selectedTime);
-            this.props.nextScene();
+            if (this.props.scene > 0) {
+                return _react2.default.createElement(
+                    'div',
+                    null,
+                    _react2.default.createElement(
+                        _reactBootstrap.Button,
+                        { onClick: function onClick() {
+                                return _this2.props.nextScene();
+                            } },
+                        'Next'
+                    ),
+                    _react2.default.createElement(
+                        _reactBootstrap.Button,
+                        { onClick: function onClick() {
+                                return _this2.props.previousScene();
+                            } },
+                        'Back'
+                    )
+                );
+            } else if (this.props.scene === 0) {
+                return _react2.default.createElement(
+                    'div',
+                    null,
+                    _react2.default.createElement(
+                        _reactBootstrap.Button,
+                        { onClick: function onClick() {
+                                return _this2.props.nextScene();
+                            } },
+                        'Next'
+                    )
+                );
+            }
         }
     }]);
 
-    return DepartureTime;
+    return SceneNavigator;
 }(_react.Component);
 
 /***/ }),
-/* 348 */
+/* 349 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -44566,7 +44435,7 @@ var Init = exports.Init = function (_Component) {
 }(_react.Component);
 
 /***/ }),
-/* 349 */
+/* 350 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

@@ -1,98 +1,53 @@
 import React, {Component} from 'react';
 import {Location} from './Location';
 import {Stops} from './Stops';
-import {DepartureTime} from './DepartureTime';
+import {Sending} from './Sending';
+
+import {SceneNavigator} from './SceneNavigator';
 
 export class Admin extends Component {
     componentWillMount() {
-        this.sceneTrack = 0;
-        this.display = {
-            origin: <Location
-                type="origin"
-                className="admin-launch"
-                locations={this.props.locations}
-                nextScene={() => this.nextScene()}
-                submitLocation={(loc) => this.submitLocation(loc, 'origin')}
-            />,
-            destination: <Location
-                locations={this.props.locations}
-                type="destination"
-                className="admin-launch"
-                nextScene={() => this.nextScene()}
-                submitLocation={(loc) => this.submitLocation(loc, 'destination')}
-            />,
-            departureTime: <DepartureTime
-                type="departureTime"
-                className="admin-launch"
-                times={this.props.times}
-                nextScene={() => this.nextScene()}
-                submitTime={(time) => this.submitLocation(time, 'departureTime')}
-            />, 
-        }
-        this.displayKeys = Object.keys(this.display);
-        let display = this.displayKeys[this.sceneTrack];
-        fetch('/driver-data', {
-            method: 'post',
-            body: {}
-        })
-        .then((res) => {
-            console.log('res: ', res);
-            return res.json();
-        })
-        .then((res) => {
-            console.log(res);
-            this.username = res.userName;
-            this.setState({
-                currentCoords: { lat: 'pending', lng: 'pending' },
-                admin: this.username,
-                display
-            });
-        })
-        .catch((err) => {
-            console.log('error is: ', err);
-        })
+        this.locations = [{
+            direction: 'Northbound',
+            stops: ['Forked River', 'Monmouth', 'Red Bank', 'PNC', 'Cheesequake'],
+        }, {
+            direction: 'Southbound',
+            stops: ['Cheesequake', 'PNC', 'Red Bank', 'Monmouth', 'Forked River'],
+        }];
+        this.display = [{
+            component: <Location
+                locations={this.locations}
+                submitLocation={(loc) => this.props.submitLocation(loc)}
+                nextScene={() => this.props.nextScene()}
+                previousScene={() => this.props.previousScene()}
+                scene={this.props.scene}
+            />
+        }, {
+            component: <Stops 
+                        locations={this.locations}
+                        addStops={(stop) => this.props.addStops(stop)}
+                        removeStops={(stop) => this.props.removeStops(stop)}
+                        plannedStops={() => this.getStops()}/>
+        }, {
+            component: <Sending 
+                            method={() => this.props.method()}
+                        />
+        }]
     }
-    nextScene() {
-        ++this.sceneTrack;
-        this.setState({
-            display: this.displayKeys[this.sceneTrack],
-        });
-        if (this.sceneTrack === this.displayKeys.length) {
-            this.setState({
-                displayStops: true,
-            });
-        }
-    }
-    submitLocation(loc, type) {
-        this.setState({
-            [type]: loc,
-        });
-        this.props.submitLocation(loc, type);
+    getStops() {
+        return this.props.plannedStops;
     }
     render() {
-        if (!this.state) {
-            return (
-                <div>Loading...</div>
-            );
-        }
-        if (this.state.displayStops) {
-            return (
-                <div className="admin-launch">
-                    <Stops
-                        stops={this.props.locations}
-                        origin={this.state.origin}
-                        destination={this.state.destination}
-                        handleStops={(stops) => this.props.handleStops(stops)}
-                    />
-                </div>
-            )
-        } else {
-            return (
-                <div className="admin-launch">
-                    hello, {this.state.admin}
-                    {(() => { return (this.display[this.state.display]) })()}
-                </div>
-            );
-        }
+        return (
+            <div>
+                <div>{this.display[this.props.scene].component}</div>
+                <SceneNavigator
+                    nextScene={() => this.props.nextScene()}
+                    previousScene={() => this.props.previousScene()}
+                    scene={this.props.scene}
+                    last={this.display.length - 1}
+                />
+            </div>
+        );
     }
 }

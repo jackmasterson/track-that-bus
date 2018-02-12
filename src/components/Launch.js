@@ -7,7 +7,7 @@ import {Init} from './Init';
 
 export class Launch extends Component {
     componentWillMount() {
-
+        this.scene = this.scene || 0;
         this.setState({
             locations: [{
                 stop: 'Port Authority',
@@ -34,37 +34,14 @@ export class Launch extends Component {
                 coords: { lat: 39.8741802, lng: -74.2168655 },
                 map: 5,
             }],
-            times: [{
-                time: '5:10am',
-            }, {
-                time: '5:45am',
-            }, {
-                time: '6:00am',
-            }, {
-                time: '6:25am',
-            }, {
-                time: '2:00pm',
-            }, {
-                time: '2:30pm',
-            }, {
-                time: '3:00pm',
-            }, {
-                time: '3:30pm',
-            }, {
-                time: '4:20pm',
-            }, {
-                time: '4:40pm',
-            }]
+            scene: this.scene,
+            plannedStops: [],
+            completed: false,
         });
     }
-    submitLocation(loc, type) {
+    submitLocation(loc) {
         this.setState({
-            [type]: loc,
-        });
-    }
-    submitStops(stops) {
-        this.setState({
-            stops: stops,
+            direction: loc,
         });
     }
     getLocation() {
@@ -79,30 +56,20 @@ export class Launch extends Component {
         }, this.error, options);
     }
     success(pos) {
-        let buid = '';
-        let dest = this.state.destination.stop;
-        let origin = this.state.origin.stop;
-        let dep = this.state.departureTime;
-        this.state.locations.map((loc) => {
-            loc.stop === origin ? buid += `&origin_${loc.map}` : buid;
-            loc.stop === dest ? buid += `&dest_${loc.map}` : buid;
-            loc.stop === origin ? buid += `&depTime_${dep}` : buid;
+        console.log('pos: ', pos);
+        this.setState({
+            sent: true,
         });
-
-        let currentCoords = {
-            lat: pos.coords.latitude,
-            lng: pos.coords.longitude,
-        };
         fetch('/update', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                currentCoords, 
-                buid,
-                stops: this.state.stops,
-                destination: this.state.destination,
+                direction: this.state.direction,
+                stops: this.state.plannedStops,
+                data: JSON.stringify(this.locations),
+                current: {lat: pos.coords.latitude, lng: pos.coords.longitude},
             })
         })
         .then((res) => {
@@ -111,21 +78,32 @@ export class Launch extends Component {
         .catch((err) => {
             console.log('error is: ', err);
         });
-
-        // bug
-        this.timeout = setTimeout(() => {
-            this.getLocation();
-        }, 4500000);
-        // end bug
-        this.setState({
-            sent: true,
-        });
     };
     handleStops(stops) {
         this.setState({
             stops
         });
         this.getLocation();
+    }
+    nextScene() {
+        this.setState({
+            scene: ++this.scene,
+        });
+    }
+    previousScene() {
+        this.setState({
+            scene: --this.scene,
+        })
+    }
+    addStops(stop) {
+        this.setState({
+            plannedStops: [...this.state.plannedStops, stop]
+        });
+    }
+    removeStops(stop) {
+        this.setState({
+            plannedStops: this.state.plannedStops.filter((plannedStop) => plannedStop !== stop)
+        });
     }
     error(err) {
         console.warn(`ERROR(${err.code}): ${err.message}`);
@@ -141,7 +119,7 @@ export class Launch extends Component {
                     }} />
                     <Route path="/driver" render={() => {
                         if (this.state.sent) {
-                             return <div>Coordinates sent!</div>
+                             return <div>Data sent!</div>
                         } else {
                             return (
                                 <Admin
@@ -150,7 +128,14 @@ export class Launch extends Component {
                                     locations={this.state.locations}
                                     times={this.state.times}
                                     getLocation={() => this.getLocation()}
-                                    handleStops={(stops) => this.handleStops(stops)}
+                                    nextScene={() => this.nextScene()}
+                                    previousScene={() => this.previousScene()}
+                                    scene={this.state.scene}
+                                    addStops={(stop) => this.addStops(stop)}
+                                    removeStops={(stop) => this.removeStops(stop)}
+                                    plannedStops={this.state.plannedStops}
+                                    completed={this.state.completed}
+                                    method={() => this.getLocation()}
                                 />
                             )
                         }

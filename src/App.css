@@ -108,3 +108,15 @@ ul {
     overflow-x: scroll;
     scrollbar-base-color: gray;
 }
+
+.selected-stops {
+    cursor: pointer;
+}
+
+.above-map {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 1000;
+    background: white;
+}

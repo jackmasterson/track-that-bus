@@ -13,7 +13,7 @@ const LocalStrategy = require('passport-local').Strategy;
 
 const users = require('./users');
 
-this.buids = {};
+this.buids = this.buids || [];
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -77,44 +77,32 @@ app.post('/login',
 // end passport
 
 app.post('/update', (req, res) => {
-    console.log(req.body);
-    let buid = req.body.buid;
-    this.buids[buid] = req.body.currentCoords;
-    this.buids[buid].stops = req.body.stops;
-    this.buids[buid].gmapi = process.env.GOOGLE_MAPS_API;
-    this.buids[buid].destination = req.body.destination;
-    this.buids[buid].stopData = {};
-    this.buids[buid].destinationData = {};
-    distance.get(
-        {
-            origin: `${req.body.currentCoords.lat}, ${req.body.currentCoords.lng}`,
-            destination: `${req.body.destination.coords.lat}, ${req.body.destination.coords.lng}`,
-            units: 'imperial',
-            mode: 'driving',
-        }, (err, data) => {
-            if (err) return console.log(err);
-            let name = req.body.destination.stop;
-            this.buids[buid].distance = data.distance;
-            this.buids[buid].duration = data.duration;
-        });
-    req.body.stops.map((stop) => {
-        stop = JSON.parse(stop);
+    let south;
+    if (req.body.direction === 'Southbound') {
+        south = true;
+    }
+    let data = {
+        current: req.body.current,
+        direction: req.body.direction,
+        south: south,
+        stops: [],
+    };
+    let locations = {
+        'Port Authority': { lat: 40.7568858, lng: -73.9931965 },
+        'Cheesequake': { lat: 40.4664835, lng: -74.2916424 },
+        'PNC': { lat: 40.3853523, lng: -74.1848752 },
+        'Red Bank': { lat: 40.3499661, lng: -74.0877706 },
+        'Monmouth': { lat: 40.1983467, lng: -74.1013166 },
+        'Forked River': { lat: 39.8741802, lng: -74.2168655 },
+    };
 
-        distance.get(
-            {
-                origin: `${req.body.currentCoords.lat}, ${req.body.currentCoords.lng}`,
-                destination: `${stop.coords.lat}, ${stop.coords.lng}`,
-                units: 'imperial',
-                mode: 'driving',
-            }, (err, data) => {
-                if (err) return console.log(err);
-                let name = stop.stop;
-                this.buids[buid].stopData[name] = {
-                    distance: data.distance,
-                    duration: data.duration
-                }
-            });
-    })
+    req.body.stops.map((stop, incr) => {
+        data.stops.push({stop: locations[stop], location: stop});
+    });
+
+    this.buids.push({
+       [Date.now()]: data,
+    });
 });
 
 
